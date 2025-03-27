@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth');
+const musicRoutes = require('./routes/music');
+
 
 
 
@@ -24,6 +26,7 @@ app.use('/uploads', express.static('uploads')); // Servir archivos estáticos
 
 // Rutas
 app.use('/api/auth', authRoutes);
+app.use('/api/music', musicRoutes);
 
 
 app.listen(PORT, () => {

@@ -1,20 +1,29 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-title>Buscar Música</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <ion-searchbar (ionInput)="search($event.target.value ?? '')" placeholder="Buscar canciones..."></ion-searchbar>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" size-md="4" size-lg="3" *ngFor="let track of musicResults">
+        <ion-card>
+          <ion-img [src]="track.imageUrl" alt="Portada del álbum"></ion-img>
+          <ion-card-header>
+            <ion-card-title>{{ track.name }}</ion-card-title>
+            <ion-card-subtitle>Artista(s): {{ track.artists }}</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <p><strong>Álbum:</strong> {{ track.album }}</p>
+            <p><strong>Fecha de lanzamiento:</strong> {{ track.releaseDate }}</p>
+            <p><strong>Duración:</strong> {{ formatDuration(track.durationMs) }}</p>
+            <a *ngIf="track.previewUrl" [href]="track.previewUrl" target="_blank">Escuchar vista previa</a>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router'; // Importa el servicio Router
 import { FormsModule } from '@angular/forms';
 import {
   IonHeader,
@@ -33,13 +34,14 @@ export class LoginPage {
   email = '';
   password = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {} // Inyecta el servicio Router
 
   login() {
     this.authService.login(this.email, this.password).subscribe(
       (response) => {
         this.authService.saveToken(response.token);
         console.log('Inicio de sesión exitoso, token guardado');
+        this.router.navigate(['/home']); // Redirige a la página Home
       },
       (error) => {
         console.error('Error al iniciar sesión:', error);

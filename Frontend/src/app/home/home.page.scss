@@ -1,27 +1,47 @@
-#container {
-  text-align: center;
+/* filepath: c:\Users\luis3\OneDrive\Desktop\Spotify-Angular\Frontend\src\app\home\home.page.scss */
 
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+/* Estilo general */
+ion-content {
+  --background: #f9f9f9;
+  padding: 10px;
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
+/* Estilo para las tarjetas */
+ion-card {
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
 }
 
-#container p {
+ion-card:hover {
+  transform: scale(1.05);
+}
+
+ion-img {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  height: 150px;
+  object-fit: cover;
+}
+
+ion-card-title {
   font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
+  font-weight: bold;
+  color: #333;
 }
 
-#container a {
+ion-card-subtitle {
+  font-size: 14px;
+  color: #666;
+}
+
+ion-card-content p {
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+ion-card-content a {
+  color: #3880ff;
   text-decoration: none;
+  font-weight: bold;
 }
