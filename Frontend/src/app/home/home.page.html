@@ -1,21 +1,54 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <!-- Botón circular para abrir/cerrar la sidebar -->
+      <button id="menuButton" (click)="toggleSidebar()">
+        <ion-icon name="menu" slot="icon-only"></ion-icon>
+      </button>
+    </ion-buttons>
     <ion-title>Buscar Música</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<!-- Sidebar -->
+<div
+  class="sidebar"
+  [class.open]="isSidebarOpen"
+  (touchstart)="onTouchStart($event)"
+  (touchend)="onTouchEnd($event)"
+>
+  <div class="sidebar-header">
+    <h2>Menú</h2>
+    <button class="close-btn" (click)="toggleSidebar()">
+      <ion-icon name="close-outline"></ion-icon>
+    </button>
+  </div>
+  <ul class="sidebar-menu">
+    <li (click)="goToSettings()">
+      <ion-icon name="settings-outline"></ion-icon>
+      Configuración
+    </li>
+    <li (click)="logout()">
+      <ion-icon name="log-out-outline"></ion-icon>
+      Cerrar sesión
+    </li>
+  </ul>
+</div>
+
+<ion-content id="mainContent">
+  <!-- Buscador -->
   <ion-searchbar (ionInput)="search($event.target.value ?? '')" placeholder="Buscar canciones..."></ion-searchbar>
 
+  <!-- Cuadrícula de canciones -->
   <ion-grid>
     <ion-row>
       <ion-col size="6" size-md="4" size-lg="3" *ngFor="let track of musicResults">
-        <ion-card>
+        <ion-card (click)="goToSongDetail(track.id)">
           <ion-img [src]="track.imageUrl" alt="Portada del álbum"></ion-img>
-          <ion-card-header>
-            <ion-card-title>{{ track.name }}</ion-card-title>
-            <ion-card-subtitle>Artista(s): {{ track.artists }}</ion-card-subtitle>
-          </ion-card-header>
+            <ion-card-header>
+              <ion-card-title>{{ track.name }}</ion-card-title>
+              <ion-card-subtitle>Artista(s): {{ track.artists }}</ion-card-subtitle>
+            </ion-card-header>
           <ion-card-content>
             <p><strong>Álbum:</strong> {{ track.album }}</p>
             <p><strong>Fecha de lanzamiento:</strong> {{ track.releaseDate }}</p>

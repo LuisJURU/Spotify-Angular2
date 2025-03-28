@@ -9,11 +9,19 @@ export class MusicService {
 
   constructor(private http: HttpClient) {}
 
+  getSongById(songId: string) {
+    return this.http.get(`${this.apiUrl}/track/${songId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+      },
+    });
+  }
+
   searchMusic(query: string) {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, // Envía el token JWT
     });
   
-    return this.http.get(`${this.apiUrl}/search`, { headers, params: { query } });
+    return this.http.get<{ tracks: any[]; artists: any[] }>(`${this.apiUrl}/search`, { headers, params: { query } });
   }
 }

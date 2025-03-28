@@ -5,7 +5,7 @@ const { getSpotifyAccessToken } = require('../utils/spotifyUtils'); // Importa l
 
 const router = express.Router();
 
-// Ruta para obtener datos de música
+// Ruta para buscar canciones y artistas
 router.get('/search', authMiddleware, async (req, res) => {
   const { query } = req.query;
 
@@ -26,10 +26,8 @@ router.get('/search', authMiddleware, async (req, res) => {
       },
       params: {
         q: query,
-        type: 'track',
-        // limit: 10,
-        limit: 50,
-        offset: 50,
+        type: 'track,artist', // Incluye tanto canciones como artistas
+        limit: 20, // Puedes ajustar el límite según tus necesidades
       },
     });
 
@@ -45,11 +43,78 @@ router.get('/search', authMiddleware, async (req, res) => {
       imageUrl: track.album.images[0]?.url,
     }));
 
-    res.json(tracks); // Devuelve solo los datos relevantes al frontend
+    const artists = response.data.artists.items.map((artist) => ({
+      id: artist.id,
+      name: artist.name,
+      genres: artist.genres,
+      followers: artist.followers.total,
+      imageUrl: artist.images[0]?.url,
+    }));
+
+    res.json({ tracks, artists }); // Devuelve canciones y artistas al frontend
   } catch (error) {
     console.error('Error al llamar a la API de música:', error.response?.data || error.message);
     res.status(500).json({ error: 'Error al obtener datos de música', details: error.response?.data || error.message });
   }
+});
+
+// Ruta para obtener detalles de una canción
+router.get('/track/:id', authMiddleware, async (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    return res.status(400).json({ error: 'El ID de la canción es obligatorio' });
+  }
+
+  try {
+    // Verifica si el token está disponible, si no, obtén uno nuevo
+    if (!process.env.SPOTIFY_ACCESS_TOKEN) {
+      await getSpotifyAccessToken();
+    }
+
+    // Llama a la API de Spotify para obtener los detalles de la canción
+    const response = await axios.get(`https://api.spotify.com/v1/tracks/${id}`, {
+      headers: {
+        Authorization: `Bearer ${process.env.SPOTIFY_ACCESS_TOKEN}`,
+      },
+    });
+
+    // Estructura los datos relevantes
+    const track = {
+      id: response.data.id,
+      name: response.data.name,
+      artists: response.data.artists.map((artist) => artist.name),
+      album: {
+        name: response.data.album.name,
+        release_date: response.data.album.release_date,
+        images: response.data.album.images,
+      },
+      duration_ms: response.data.duration_ms,
+      preview_url: response.data.preview_url,
+    };
+
+    res.json(track); // Devuelve los datos al frontend
+  } catch (error) {
+    console.error('Error al obtener los detalles de la canción:', error.response?.data || error.message);
+    res.status(500).json({ error: 'Error al obtener los detalles de la canción', details: error.response?.data || error.message });
+  }
+
+  router.get('/preview', async (req, res) => {
+    const { url } = req.query;
+  
+    if (!url) {
+      return res.status(400).json({ error: 'La URL de la vista previa es obligatoria' });
+    }
+  
+    try {
+      const response = await axios.get(url, { responseType: 'stream' });
+      res.set('Content-Type', response.headers['content-type']);
+      response.data.pipe(res);
+    } catch (error) {
+      console.error('Error al obtener la vista previa:', error.message);
+      res.status(500).json({ error: 'Error al obtener la vista previa' });
+    }
+  });
 });
 
 module.exports = router;

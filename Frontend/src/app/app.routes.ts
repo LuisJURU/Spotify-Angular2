@@ -16,4 +16,9 @@ export const routes: Routes = [
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
     canActivate: [AuthGuard], // Protege la ruta con el AuthGuard
   },
+  {
+    path: 'song-detail/:id', // Ruta con parámetro para identificar la canción
+    loadComponent: () =>
+      import('./song-detail/song-detail.page').then((m) => m.SongDetailPage),
+  },
 ];
