@@ -17,8 +17,17 @@ export const routes: Routes = [
     canActivate: [AuthGuard], // Protege la ruta con el AuthGuard
   },
   {
+    path: 'search',
+    loadComponent: () => import('./search/search.page').then((m) => m.SearchPage),
+    canActivate: [AuthGuard], // Protege la ruta con el AuthGuard
+  },
+  {
     path: 'song-detail/:id', // Ruta con parámetro para identificar la canción
     loadComponent: () =>
       import('./song-detail/song-detail.page').then((m) => m.SongDetailPage),
+  },  {
+    path: 'register',
+    loadComponent: () => import('./register/register.page').then( m => m.RegisterPage)
   },
+
 ];

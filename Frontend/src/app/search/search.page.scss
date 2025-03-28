@@ -1,0 +1,68 @@
+.search-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: #181818;
+  }
+  
+  .search-bar input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    background-color: #121212;
+    color: #fff;
+    margin-right: 10px;
+  }
+  
+  .search-bar button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #3880ff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .search-bar button:hover {
+    background-color: #3171e0;
+  }
+  
+  .artist-results,
+  .song-results {
+    padding: 10px;
+  }
+  
+  .artist-card,
+  .song-card {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    background-color: #181818;
+    padding: 10px;
+    border-radius: 5px;
+    color: #fff;
+  }
+  
+  .artist-card img,
+  .song-card img {
+    width: 60px;
+    height: 60px;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  
+  .artist-card h3,
+  .song-card h3 {
+    margin: 0;
+    font-size: 16px;
+  }
+  
+  .artist-card p,
+  .song-card p {
+    margin: 0;
+    font-size: 14px;
+    color: #b3b3b3;
+  }

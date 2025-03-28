@@ -4,9 +4,7 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth');
 const musicRoutes = require('./routes/music');
-
-
-
+const userRoutes = require('./routes/user'); // Asegúrate de que esta línea esté presente
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -27,6 +25,7 @@ app.use('/uploads', express.static('uploads')); // Servir archivos estáticos
 // Rutas
 app.use('/api/auth', authRoutes);
 app.use('/api/music', musicRoutes);
+app.use('/api/user', userRoutes); // Asegúrate de que esta línea esté presente
 
 
 app.listen(PORT, () => {
