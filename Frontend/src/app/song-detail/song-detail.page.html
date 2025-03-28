@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ song?.name }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div
+    class="song-detail"
+    [ngStyle]="{ 'background': 'linear-gradient(to bottom, ' + backgroundColor + ', black)' }"
+  >
+    <img
+      #albumImage
+      [src]="song?.album.images[0]?.url"
+      alt="Portada del álbum"
+    />
+    <h2>{{ song?.name }}</h2>
+    <p><strong>Artista(s):</strong> {{ artistNames }}</p>
+    <p><strong>Álbum:</strong> {{ song?.album.name }}</p>
+    <p><strong>Fecha de lanzamiento:</strong> {{ song?.album.release_date }}</p>
+    <p><strong>Duración:</strong> {{ formatDuration(song?.duration_ms) }}</p>
+
+    <audio #audioPlayer controls>
+      <source [src]="song?.preview_url" type="audio/mpeg" />
+      Tu navegador no soporta el elemento de audio.
+    </audio>
+    
+    <button (click)="playPreview()">Reproducir</button>
+    <button (click)="pausePreview()">Pausar</button>
+  </div>
+</ion-content>
+

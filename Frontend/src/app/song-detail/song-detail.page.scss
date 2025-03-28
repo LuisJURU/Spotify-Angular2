@@ -1,0 +1,30 @@
+.song-detail {
+  text-align: center;
+  padding: 20px;
+  color: white; /* Asegúrate de que el texto sea legible */
+  min-height: 100vh; /* Asegura que el fondo cubra toda la pantalla */
+  background-size: cover;
+  background-position: center;
+}
+
+.song-detail img {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+
+.song-detail h2 {
+  font-size: 24px;
+  margin: 10px 0;
+}
+
+.song-detail p {
+  font-size: 16px;
+  margin: 5px 0;
+}
+
+audio {
+  margin-top: 20px;
+  width: 100%;
+}
