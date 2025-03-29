@@ -57,20 +57,20 @@ export class SearchPage {
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   }
 
-  goToSongDetail(trackId: string) {
+    goToSongDetail(trackId: string) {
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     const email = currentUser.email; // Obtén el email del usuario actual
-
+  
     if (!email) {
       console.error('No se encontró el usuario actual.');
       return;
     }
-
+  
     const track = this.musicResults.find((t) => t.id === trackId);
-
+  
     if (track) {
-      // Enviar la canción al backend
-      this.http.post('http://localhost:5000/api/user/viewed-tracks', { email, track }).subscribe({
+      // Usa el servicio para enviar la canción al backend
+      this.trackService.saveViewedTrack(email, track).subscribe({
         next: (response) => {
           console.log('Canción guardada:', response);
         },
@@ -79,7 +79,7 @@ export class SearchPage {
         },
       });
     }
-
+  
     // Navegar a la página de detalles de la canción
     this.router.navigate(['/song-detail', trackId]);
   }
