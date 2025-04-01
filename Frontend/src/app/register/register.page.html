@@ -1,18 +1,12 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Iniciar Sesión</ion-title>
+    <ion-title>Registro</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Iniciar Sesión</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div class="login-container">
-    <form (ngSubmit)="login()">
+  <div class="register-container">
+    <form (ngSubmit)="register()">
       <ion-item>
         <ion-label position="floating">Correo Electrónico</ion-label>
         <ion-input type="email" [(ngModel)]="email" name="email" required></ion-input>
@@ -23,12 +17,17 @@
         <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
       </ion-item>
 
-      <ion-button expand="block" type="submit">Iniciar Sesión</ion-button>
+      <ion-item>
+        <ion-label position="floating">Confirmar Contraseña</ion-label>
+        <ion-input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required></ion-input>
+      </ion-item>
+
+      <ion-button expand="block" type="submit">Registrarse</ion-button>
     </form>
 
     <div class="nav-link">
       <p>¿Ya tienes una cuenta?</p>
-      <button onclick="window.location.href='/register'" class="custom-button">Inicia Sesión</button>
+      <button onclick="window.location.href='/login'" class="custom-button">Inicia Sesión</button>
     </div>
   </div>
 </ion-content>

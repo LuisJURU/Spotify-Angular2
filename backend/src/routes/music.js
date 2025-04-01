@@ -26,13 +26,13 @@ router.get('/search', authMiddleware, async (req, res) => {
       },
       params: {
         q: query,
-        type: 'track,artist', // Incluye tanto canciones como artistas
-        limit: 20, // Puedes ajustar el límite según tus necesidades
+        type: 'track', // Incluye tanto canciones como artistas
+        limit: 50, // Puedes ajustar el límite según tus necesidades
       },
     });
 
     // Filtra y estructura los datos relevantes
-    const tracks = response.data.tracks.items.map((track) => ({
+    const tracks = response.data.tracks?.items.map((track) => ({
       id: track.id,
       name: track.name,
       artists: track.artists.map((artist) => artist.name).join(', '),
@@ -41,17 +41,18 @@ router.get('/search', authMiddleware, async (req, res) => {
       durationMs: track.duration_ms,
       previewUrl: track.preview_url,
       imageUrl: track.album.images[0]?.url,
-    }));
+    })) || [];
 
-    const artists = response.data.artists.items.map((artist) => ({
+    const artists = response.data.artists?.items.map((artist) => ({
       id: artist.id,
       name: artist.name,
       genres: artist.genres,
       followers: artist.followers.total,
       imageUrl: artist.images[0]?.url,
-    }));
+    })) || [];
 
-    res.json({ tracks, artists }); // Devuelve canciones y artistas al frontend
+    // Devuelve primero los artistas y luego las canciones
+    res.json({ artists, tracks });
   } catch (error) {
     console.error('Error al llamar a la API de música:', error.response?.data || error.message);
     res.status(500).json({ error: 'Error al obtener datos de música', details: error.response?.data || error.message });

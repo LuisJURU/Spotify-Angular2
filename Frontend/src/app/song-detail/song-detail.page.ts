@@ -11,7 +11,7 @@ import ColorThief from 'color-thief-browser';
   templateUrl: './song-detail.page.html',
   styleUrls: ['./song-detail.page.scss'],
   standalone: true,
-  imports: [IonImg, IonBackButton, IonButtons, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule],
+  imports: [IonBackButton, IonButtons, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule],
 })
 export class SongDetailPage implements OnInit {
   song: any; // Detalles de la canción
@@ -20,6 +20,7 @@ export class SongDetailPage implements OnInit {
 
   @ViewChild('albumImage', { static: false }) albumImage!: ElementRef; // Referencia a la imagen del álbum
   @ViewChild('audioPlayer', { static: false }) audioPlayer!: ElementRef;
+artist: any;
 
   constructor(
     private route: ActivatedRoute,

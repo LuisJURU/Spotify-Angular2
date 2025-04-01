@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Buscar Música</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Barra de búsqueda con HTML normal -->
+  <div class="search-bar">
+    <input
+      type="text"
+      placeholder="Buscar canciones o artistas..."
+      [(ngModel)]="searchQuery"
+      (input)="search(searchQuery)" 
+    />
+  </div>
+
+  <!-- Resultados de Artistas -->
+  <div *ngIf="artistResults.length > 0">
+    <h2>Artistas</h2>
+    <div class="artist-results">
+      <div class="artist-card" *ngFor="let artist of artistResults">
+        <img [src]="artist.imageUrl" alt="Imagen del artista" />
+        <div>
+          <h3>{{ artist.name }}</h3>
+          <p>{{ artist.genres.join(', ') }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Resultados de Canciones -->
+<div *ngIf="musicResults.length > 0">
+  <h2>Canciones</h2>
+  <div class="song-results">
+    <div class="song-card" *ngFor="let track of musicResults" (click)="goToSongDetail(track.id)">
+      <img [src]="track.imageUrl" alt="Portada del álbum" />
+      <div>
+        <h3>{{ track.name }}</h3>
+        <p>{{ track.artists }}</p>
+        <p><strong>Álbum:</strong> {{ track.album }}</p>
+        <p><strong>Duración:</strong> {{ formatDuration(track.durationMs) }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+</ion-content>
+
+<app-navbar></app-navbar>
