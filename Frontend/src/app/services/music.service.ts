@@ -5,7 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root',
 })
 export class MusicService {
-  private apiUrl = 'http://localhost:5000/api/music'; // URL del backend
+  private apiUrl = 'https://spotify-angular2-yoli.vercel.app/api/music'; // URL del backend
 
   constructor(private http: HttpClient) {}
 
