@@ -1,7 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const authMiddleware = require('../middleware/authMiddleware');
-const { getValidSpotifyAccessToken } = require('../utils/spotifyUtils');
+const { getValidSpotifyAccessToken } = require('../utils/spotifyUtils'); // Importa la función para obtener un token válido
 
 const router = express.Router();
 
@@ -14,21 +14,46 @@ router.get('/search', authMiddleware, async (req, res) => {
   }
 
   try {
-    const token = await getValidSpotifyAccessToken(); // Obtén un token válido
+    // Obtén un token válido
+    const token = await getValidSpotifyAccessToken();
+
+    // Llama a la API de Spotify
     const response = await axios.get('https://api.spotify.com/v1/search', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
       params: {
         q: query,
-        type: 'track,artist',
+        type: 'track', // Incluye tanto canciones como artistas
+        limit: 50, // Puedes ajustar el límite según tus necesidades
       },
     });
 
-    res.json(response.data);
+    // Filtra y estructura los datos relevantes
+    const tracks = response.data.tracks?.items.map((track) => ({
+      id: track.id,
+      name: track.name,
+      artists: track.artists.map((artist) => artist.name).join(', '),
+      album: track.album.name,
+      releaseDate: track.album.release_date,
+      durationMs: track.duration_ms,
+      previewUrl: track.preview_url,
+      imageUrl: track.album.images[0]?.url,
+    })) || [];
+
+    const artists = response.data.artists?.items.map((artist) => ({
+      id: artist.id,
+      name: artist.name,
+      genres: artist.genres,
+      followers: artist.followers.total,
+      imageUrl: artist.images[0]?.url,
+    })) || [];
+
+    // Devuelve primero los artistas y luego las canciones
+    res.json({ artists, tracks });
   } catch (error) {
-    console.error('Error al buscar en Spotify:', error.response?.data || error.message);
-    res.status(500).json({ error: 'Error al buscar en Spotify' });
+    console.error('Error al llamar a la API de música:', error.response?.data || error.message);
+    res.status(500).json({ error: 'Error al obtener datos de música', details: error.response?.data || error.message });
   }
 });
 
@@ -41,13 +66,17 @@ router.get('/track/:id', authMiddleware, async (req, res) => {
   }
 
   try {
-    const token = await getValidSpotifyAccessToken(); // Obtén un token válido
+    // Obtén un token válido
+    const token = await getValidSpotifyAccessToken();
+
+    // Llama a la API de Spotify para obtener los detalles de la canción
     const response = await axios.get(`https://api.spotify.com/v1/tracks/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
+    // Estructura los datos relevantes
     const track = {
       id: response.data.id,
       name: response.data.name,
@@ -61,7 +90,7 @@ router.get('/track/:id', authMiddleware, async (req, res) => {
       preview_url: response.data.preview_url,
     };
 
-    res.json(track);
+    res.json(track); // Devuelve los datos al frontend
   } catch (error) {
     console.error('Error al obtener los detalles de la canción:', error.response?.data || error.message);
     res.status(500).json({ error: 'Error al obtener los detalles de la canción', details: error.response?.data || error.message });
