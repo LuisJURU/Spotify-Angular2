@@ -1,6 +1,9 @@
 const axios = require('axios');
 
-// Función para obtener el token de acceso de Spotify
+let spotifyAccessToken = null; // Variable para almacenar el token en memoria
+let tokenExpirationTime = null; // Variable para almacenar el tiempo de expiración del token
+
+// Función para obtener un nuevo token de Spotify
 const getSpotifyAccessToken = async () => {
   try {
     const response = await axios.post(
@@ -16,13 +19,22 @@ const getSpotifyAccessToken = async () => {
       }
     );
 
-    // Guarda el token en una variable de entorno
-    process.env.SPOTIFY_ACCESS_TOKEN = response.data.access_token;
-    console.log('Nuevo token de Spotify obtenido:', response.data.access_token);
+    spotifyAccessToken = response.data.access_token;
+    tokenExpirationTime = Date.now() + response.data.expires_in * 1000; // Calcula el tiempo de expiración
+
+    console.log('Nuevo token de Spotify obtenido:', spotifyAccessToken);
   } catch (error) {
     console.error('Error al obtener el token de Spotify:', error.response?.data || error.message);
     throw new Error('No se pudo obtener el token de Spotify');
   }
 };
 
-module.exports = { getSpotifyAccessToken };
+// Función para obtener un token válido
+const getValidSpotifyAccessToken = async () => {
+  if (!spotifyAccessToken || Date.now() >= tokenExpirationTime) {
+    await getSpotifyAccessToken(); // Obtén un nuevo token si no existe o ha expirado
+  }
+  return spotifyAccessToken;
+};
+
+module.exports = { getValidSpotifyAccessToken };

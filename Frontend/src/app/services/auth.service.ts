@@ -7,7 +7,7 @@ import { tap } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:5000/api/auth'; // Cambia esto según tu configuración
+  private apiUrl = 'https://spotify-angular2-yoli.vercel.app/api/auth'; // Cambia esto según tu configuración
 
   constructor(private http: HttpClient) {}
 

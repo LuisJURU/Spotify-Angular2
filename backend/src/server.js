@@ -5,6 +5,8 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth');
 const musicRoutes = require('./routes/music');
 const userRoutes = require('./routes/user'); // Asegúrate de que esta línea esté presente
+const { getSpotifyAccessToken } = require('./utils/spotifyUtils');
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -18,6 +20,12 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
   allowedHeaders: ['Content-Type', 'Authorization'] // Encabezados permitidos
 }));
+
+// Renueva el token cada 55 minutos (3300 segundos)
+setInterval(async () => {
+  console.log('Renovando el token de Spotify...');
+  await getSpotifyAccessToken();
+}, 3300 * 1000);
 
 app.use(express.json());
 app.use('/uploads', express.static('uploads')); // Servir archivos estáticos

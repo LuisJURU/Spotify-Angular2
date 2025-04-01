@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router'; // Importa el Router
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router'; // Importa NavigationEnd
+import { Subscription } from 'rxjs'; // Importa Subscription
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { TrackService } from '../services/track.service'; // Importa el servicio
@@ -16,9 +17,7 @@ import {
   IonCardTitle,
   IonImg,
   IonButtons,
-  IonButton,
-  IonIcon,
-  IonMenu, IonSearchbar } from '@ionic/angular/standalone';
+  IonIcon, } from '@ionic/angular/standalone';
 import { HttpClient } from '@angular/common/http'; // Importa HttpClient
 
 @Component({
@@ -44,10 +43,11 @@ import { HttpClient } from '@angular/common/http'; // Importa HttpClient
     CommonModule,
   ],
 })
-export class HomePage {
+export class HomePage implements OnInit, OnDestroy {
   isSidebarOpen = false; // Estado de la sidebar
-  private touchStartX = 0; // Coordenada inicial del toque
   viewedTracks: any[] = []; // Canciones vistas
+  private navigationSubscription!: Subscription; // Suscripción al evento de navegación
+  private touchStartX = 0; // Coordenada inicial del toque
 
   constructor(
     private router: Router,
@@ -56,23 +56,45 @@ export class HomePage {
   ) {}
 
   ngOnInit() {
-    this.loadViewedTracks(); // Carga las canciones recientes al inicializarse
+    this.resetViewedTracks(); // Limpia las canciones vistas al cargar la página
+    this.loadViewedTracks(); // Carga las canciones recientes del usuario actual
+
+    // Suscríbete al evento de navegación
+    this.navigationSubscription = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd && event.url === '/home') {
+        this.loadViewedTracks(); // Carga las canciones recientes al navegar a HomePage
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    // Cancela la suscripción al evento de navegación para evitar fugas de memoria
+    if (this.navigationSubscription) {
+      this.navigationSubscription.unsubscribe();
+    }
+  }
+
+  resetViewedTracks() {
+    this.viewedTracks = []; // Reinicia la lista de canciones vistas
   }
 
   loadViewedTracks() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     const email = currentUser.email; // Obtén el email del usuario actual
-
+  
     if (!email) {
       console.error('No se encontró el usuario actual.');
       this.viewedTracks = [];
       return;
     }
-
-    // Obtener las canciones recientes del backend
-    this.http.get(`/api/music/viewed-tracks/${email}`).subscribe({
-      next: (response: any) => {
-        this.viewedTracks = response;
+  
+    // Reinicia las canciones vistas antes de cargar las nuevas
+    this.resetViewedTracks();
+  
+    // Usar el servicio para obtener las canciones recientes
+    this.trackService.getViewedTracks(email).subscribe({
+      next: (response) => {
+        this.viewedTracks = response; // Asigna las canciones obtenidas a la variable
         console.log('Canciones vistas cargadas:', this.viewedTracks);
       },
       error: (error) => {
@@ -110,11 +132,13 @@ export class HomePage {
 
   logout() {
     // Elimina los datos de sesión almacenados
-    localStorage.removeItem('jwtToken'); // Cambia 'authToken' por la clave que uses para almacenar el token
-    // localStorage.removeItem('viewedTracks'); // Opcional: limpiar canciones vistas
+    localStorage.removeItem('jwtToken'); // Elimina el token
+    localStorage.removeItem('currentUser'); // Elimina el usuario actual
+  
+    // Limpia las canciones vistas
+    this.resetViewedTracks();
   
     // Redirige al usuario a la página de inicio de sesión
     this.router.navigate(['/login']);
-    console.log('Sesión cerrada y redirigido al inicio de sesión.');
   }
 }
