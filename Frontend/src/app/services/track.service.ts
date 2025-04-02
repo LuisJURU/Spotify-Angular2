@@ -19,8 +19,5 @@ export class TrackService {
   saveViewedTrack(username: string, track: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/viewed-tracks`, { username, track });
   }
-  
-  getPopularAlbums(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/popular`);
-  }
+
 }

@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router'; // Importa NavigationEnd
 import { Subscription } from 'rxjs'; // Importa Subscription
 import { CommonModule } from '@angular/common';
+import { MusicService } from '../services/music.service'; // Importa MusicService
 import { NavbarComponent } from '../navbar/navbar.component';
 import { TrackService } from '../services/track.service'; // Importa el servicio
 import {
@@ -53,6 +54,7 @@ export class HomePage implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private trackService: TrackService, // Inyecta el servicio
+    private musicService: MusicService, // Usa MusicService
     private http: HttpClient // Inyecta HttpClient
   ) {}
 
@@ -110,7 +112,7 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   loadPopularAlbums() {
-    this.trackService.getPopularAlbums().subscribe({
+    this.musicService.getPopularAlbums().subscribe({
       next: (response) => {
         this.popularAlbums = response;
         console.log('Álbumes populares cargados:', this.popularAlbums);
