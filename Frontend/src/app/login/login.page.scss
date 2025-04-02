@@ -1,28 +1,112 @@
-.nav-link {
-    text-align: center;
-    margin-top: 16px;
-  }
-  
-  .nav-link a {
-    color: var(--ion-color-primary);
-    text-decoration: none;
-    font-weight: bold;
-  }
+body {
+  background: linear-gradient(to bottom, #1e1e2f, #302b63);
+  color: #fff;
+  font-family: 'Raleway', sans-serif;
+}
 
-  .custom-button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background-color: var(--ion-color-secondary);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    text-align: center;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 10px;
+.login-container {
+  background: linear-gradient(to top, #000000, #1f1b45, #563494 ,#6a679e);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 20px;
+}
+
+.login-card {
+  background: #1e1e2f;
+  border-radius: 15px;
+  padding: 30px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+.login-card h1 {
+  font-size: 24px;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.login-card p {
+  font-size: 14px;
+  color: #aaa;
+  margin-bottom: 20px;
+}
+
+.custom-item {
+  --background: transparent;
+  --border-color: #6a679e;
+  --color: #fff;
+  margin-bottom: 20px;
+}
+
+.custom-item ion-label {
+  color: #aaa;
+}
+
+.custom-item ion-input {
+  color: #fff;
+}
+
+.custom-button {
+  background: linear-gradient(to right, #6a679e, #573b8a);
+  color: #fff;
+  font-weight: bold;
+  border-radius: 25px;
+  padding: 10px;
+  transition: background 0.3s ease;
+  width: 100%;
+}
+
+.custom-button:hover {
+  background: linear-gradient(to right, #573b8a, #6a679e);
+}
+
+.btn-login{
+  width: 100%;
+  background: linear-gradient(to right, #6a679e, #573b8a);
+  color: #fff;
+  font-weight: bold;
+  border-radius: 25px;
+  padding: 20px;
+  transition: background 0.3s ease;
+}
+
+.nav-link {
+  margin-top: 20px;
+}
+
+.nav-link p {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.custom-link {
+  background: none;
+  border: none;
+  color: #6a679e;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.custom-link:hover {
+  color: #573b8a;
+}
+
+/* Animación para el fade-in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  
-  .custom-button:hover {
-    background-color: var(--ion-color-secondary-shade);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
