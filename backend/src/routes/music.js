@@ -102,6 +102,7 @@ router.get('/popular', authMiddleware, async (req, res) => {
   try {
     // Obtén un token válido
     const token = await getValidSpotifyAccessToken();
+    console.log('Token de Spotify:', token);
 
     // Llama a la API de Spotify para obtener los álbumes y sencillos populares
     const response = await axios.get('https://api.spotify.com/v1/browse/new-releases', {
@@ -110,8 +111,11 @@ router.get('/popular', authMiddleware, async (req, res) => {
       },
       params: {
         limit: 10, // Número de álbumes/sencillos populares a obtener
+        offset: 0, // Índice del primer elemento a devolver
       },
     });
+
+    console.log('Respuesta de Spotify:', response.data);
 
     // Estructura los datos relevantes
     const albums = response.data.albums.items.map((album) => ({
