@@ -30,13 +30,13 @@ import {
   ],
 })
 export class LoginPage {
-  email = '';
+  username = ''; // Cambiado de email a username
   password = '';
 
   constructor(private authService: AuthService, private router: Router) {} // Inyecta el servicio Router
 
   login() {
-    this.authService.login(this.email, this.password).subscribe(
+    this.authService.login(this.username, this.password).subscribe(
       (response) => {
         this.authService.saveToken(response.token);
         console.log('Inicio de sesión exitoso, token guardado');
