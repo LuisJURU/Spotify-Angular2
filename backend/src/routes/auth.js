@@ -8,9 +8,9 @@ const router = express.Router();
 
 // Registro de usuario
 router.post('/register', async (req, res) => {
-  const { email, password } = req.body;
+  const { username, email, password } = req.body;
 
-  if (!email || !password) {
+  if (!username || !email || !password) {
     return res.status(400).json({ error: 'Todos los campos son obligatorios' });
   }
 
@@ -30,12 +30,12 @@ router.post('/register', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ email, password: hashedPassword });
+    const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();
 
-    const token = jwt.sign({ id: newUser._id, email }, process.env.JWT_SECRET || 'secreto', { expiresIn: '1h' });
+    const token = jwt.sign({ id: newUser._id, email, username }, process.env.JWT_SECRET || 'secreto', { expiresIn: '1h' });
 
-    res.status(201).json({ token, user: { id: newUser._id, email }, mensaje: 'Usuario registrado con éxito' });
+    res.status(201).json({ token, user: { id: newUser._id, email, username }, mensaje: 'Usuario registrado con éxito' });
   } catch (error) {
     res.status(500).json({ error: 'Error al registrar usuario: ' + error.message });
   }

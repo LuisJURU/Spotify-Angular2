@@ -20,10 +20,10 @@ export class AuthService {
     );
   }
   
-  register(email: string, password: string) {
-    return this.http.post<{ token: string; user: { id: string; email: string } }>(
+  register(username: string, email: string, password: string) {
+    return this.http.post<{ token: string; user: { id: string; email: string; username: string } }>(
       `${this.apiUrl}/register`,
-      { email, password }
+      { username, email, password }
     );
   }
   saveToken(token: string) {

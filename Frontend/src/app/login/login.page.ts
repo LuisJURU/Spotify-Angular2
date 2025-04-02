@@ -27,7 +27,6 @@ import {
     IonItem,
     IonLabel,
     IonInput,
-    IonButton,
   ],
 })
 export class LoginPage {

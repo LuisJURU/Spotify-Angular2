@@ -10,9 +10,10 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
   standalone: true,
-  imports: [FormsModule, IonButton, IonLabel, IonContent, IonTitle, IonToolbar, IonItem, IonInput, IonHeader, CommonModule]
+  imports: [FormsModule, IonLabel, IonContent, IonTitle, IonToolbar, IonItem, IonInput, IonHeader, CommonModule]
 })
 export class RegisterPage {
+  username = ''; // Nuevo campo
   email = '';
   password = '';
   confirmPassword = '';
@@ -26,7 +27,7 @@ export class RegisterPage {
       return;
     }
 
-    this.authService.register(this.email, this.password).subscribe(
+    this.authService.register(this.username, this.email, this.password).subscribe(
       (response) => {
         console.log('Usuario registrado exitosamente:', response);
         this.router.navigate(['/login']); // Redirige al login después del registro
