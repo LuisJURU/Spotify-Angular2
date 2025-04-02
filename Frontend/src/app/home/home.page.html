@@ -94,7 +94,6 @@
     <div class="carousel">
       <!-- Sección de Álbumes y Sencillos Populares -->
       <div class="popular-albums" *ngIf="popularAlbums.length > 0">
-        <h2>Álbumes y Sencillos Populares</h2>
         <div class="carousel">
           <div class="carousel-item" *ngFor="let album of popularAlbums">
             <img [src]="album.imageUrl" [alt]="album.name" />
@@ -105,6 +104,40 @@
       </div>
     </div>
   </div>
+
+  <!-- Sección de Canciones Recomendadas -->
+<div class="recommended-songs" *ngIf="recommendedSongs.length > 0">
+  <h2>Canciones Recomendadas</h2>
+  <div class="carousel">
+    <div class="carousel-item" *ngFor="let song of recommendedSongs">
+      <img [src]="song.imageUrl" [alt]="song.name" />
+      <span>{{ song.name }}</span>
+      <small>{{ song.artists }}</small>
+    </div>
+  </div>
+</div>
+
+<!-- Sección de Géneros Disponibles -->
+<div class="available-genres" *ngIf="availableGenres.length > 0">
+  <h2>Géneros Disponibles</h2>
+  <div class="genres-list">
+    <button *ngFor="let genre of availableGenres" (click)="loadRecommendedSongsByGenre(genre)">
+      {{ genre }}
+    </button>
+  </div>
+</div>
+
+<!-- Sección de Canciones Recomendadas -->
+<div class="recommended-songs" *ngIf="recommendedSongs.length > 0">
+  <h2>Canciones Recomendadas</h2>
+  <div class="carousel">
+    <div class="carousel-item" *ngFor="let song of recommendedSongs">
+      <img [src]="song.imageUrl" [alt]="song.name" />
+      <span>{{ song.name }}</span>
+      <small>{{ song.artists }}</small>
+    </div>
+  </div>
+</div>
 </ion-content>
 
 <app-navbar></app-navbar>
