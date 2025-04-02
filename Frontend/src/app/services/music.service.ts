@@ -28,6 +28,29 @@ export class MusicService {
   }
 
   getPopularAlbums(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/popular`);
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, // Envía el token JWT
+    });
+  
+    return this.http.get<any[]>(`${this.apiUrl}/popular`, { headers });
+  }
+
+  getRecommendedSongs(seedTracks: string, seedArtists: string, seedGenres: string): Observable<any[]> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, // Envía el token JWT
+    });
+  
+    return this.http.get<any[]>(`${this.apiUrl}/recommended`, {
+      headers,
+      params: { seedTracks, seedArtists, seedGenres },
+    });
+  }
+
+  getAvailableGenres(): Observable<string[]> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, // Envía el token JWT
+    });
+  
+    return this.http.get<string[]>(`${this.apiUrl}/available-genres`, { headers });
   }
 }

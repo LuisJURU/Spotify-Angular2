@@ -98,26 +98,23 @@ router.get('/track/:id', authMiddleware, async (req, res) => {
 });
 
 // Ruta para obtener álbumes y sencillos populares
-router.get('/popular', authMiddleware, async (req, res) => {
+router.get('/popular', async (req, res) => {
   try {
-    // Obtén un token válido
     const token = await getValidSpotifyAccessToken();
     console.log('Token de Spotify:', token);
 
-    // Llama a la API de Spotify para obtener los álbumes y sencillos populares
     const response = await axios.get('https://api.spotify.com/v1/browse/new-releases', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
       params: {
-        limit: 10, // Número de álbumes/sencillos populares a obtener
-        offset: 0, // Índice del primer elemento a devolver
+        limit: 10,
+        offset: 0,
       },
     });
 
     console.log('Respuesta de Spotify:', response.data);
 
-    // Estructura los datos relevantes
     const albums = response.data.albums.items.map((album) => ({
       id: album.id,
       name: album.name,
@@ -126,10 +123,13 @@ router.get('/popular', authMiddleware, async (req, res) => {
       imageUrl: album.images[0]?.url,
     }));
 
-    res.json(albums); // Devuelve los datos al frontend
+    res.json(albums);
   } catch (error) {
-    console.error('Error al obtener álbumes y sencillos populares:', error.response?.data || error.message);
-    res.status(500).json({ error: 'Error al obtener álbumes y sencillos populares', details: error.response?.data || error.message });
+    console.error('Error al obtener álbumes populares:', error.response?.data || error.message);
+    res.status(500).json({
+      error: 'Error al obtener álbumes populares',
+      details: error.response?.data || error.message,
+    });
   }
 });
 
@@ -148,6 +148,69 @@ router.get('/preview', async (req, res) => {
   } catch (error) {
     console.error('Error al obtener la vista previa:', error.message);
     res.status(500).json({ error: 'Error al obtener la vista previa' });
+  }
+});
+router.get('/recommended', authMiddleware, async (req, res) => {
+  const { seedTracks, seedArtists, seedGenres } = req.query;
+
+  if (!seedTracks && !seedArtists && !seedGenres) {
+    return res.status(400).json({ error: 'Se requiere al menos una semilla (canciones, artistas o géneros).' });
+  }
+
+  try {
+    const token = await getValidSpotifyAccessToken();
+
+    // Llama al endpoint de recomendaciones de Spotify
+    const response = await axios.get('https://api.spotify.com/v1/recommendations', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        seed_tracks: seedTracks || '', // IDs de canciones semilla
+        seed_artists: seedArtists || '', // IDs de artistas semilla
+        seed_genres: seedGenres || '', // Géneros semilla
+        limit: 10, // Número de recomendaciones a obtener
+      },
+    });
+
+    // Estructura los datos relevantes
+    const recommendations = response.data.tracks.map((track) => ({
+      id: track.id,
+      name: track.name,
+      artists: track.artists.map((artist) => artist.name).join(', '),
+      album: track.album.name,
+      imageUrl: track.album.images[0]?.url,
+      previewUrl: track.preview_url,
+    }));
+
+    res.json(recommendations); // Devuelve las recomendaciones al frontend
+  } catch (error) {
+    console.error('Error al obtener recomendaciones:', error.response?.data || error.message);
+    res.status(500).json({
+      error: 'Error al obtener recomendaciones',
+      details: error.response?.data || error.message,
+    });
+  }
+});
+
+router.get('/available-genres', authMiddleware, async (req, res) => {
+  try {
+    const token = await getValidSpotifyAccessToken();
+
+    // Llama al endpoint de Spotify para obtener los géneros disponibles
+    const response = await axios.get('https://api.spotify.com/v1/recommendations/available-genre-seeds', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    res.json(response.data.genres); // Devuelve la lista de géneros al frontend
+  } catch (error) {
+    console.error('Error al obtener géneros disponibles:', error.response?.data || error.message);
+    res.status(500).json({
+      error: 'Error al obtener géneros disponibles',
+      details: error.response?.data || error.message,
+    });
   }
 });
 
