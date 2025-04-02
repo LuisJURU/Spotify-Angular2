@@ -35,10 +35,8 @@ import { HttpClient } from '@angular/common/http'; // Importa HttpClient
     IonCol,
     IonRow,
     IonGrid,
-    IonImg,
     IonHeader,
     IonToolbar,
-    IonTitle,
     IonContent,
     CommonModule,
   ],
@@ -48,6 +46,8 @@ export class HomePage implements OnInit, OnDestroy {
   viewedTracks: any[] = []; // Canciones vistas
   private navigationSubscription!: Subscription; // Suscripción al evento de navegación
   private touchStartX = 0; // Coordenada inicial del toque
+  username: string = ''; // Propiedad para almacenar el nombre de usuario
+
 
   constructor(
     private router: Router,
@@ -58,6 +58,9 @@ export class HomePage implements OnInit, OnDestroy {
   ngOnInit() {
     this.resetViewedTracks(); // Limpia las canciones vistas al cargar la página
     this.loadViewedTracks(); // Carga las canciones recientes del usuario actual
+
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    this.username = currentUser.username || 'Usuario'; // Mostrar "Usuario" si no hay un nombre
 
     // Suscríbete al evento de navegación
     this.navigationSubscription = this.router.events.subscribe((event) => {

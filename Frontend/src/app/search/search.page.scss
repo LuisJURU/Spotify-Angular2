@@ -1,3 +1,10 @@
+ion-content {
+  --background: linear-gradient(to top, #000000, #1f1b45, #563494 ,#6a679e);
+  color: #fff; /* Texto blanco */
+  padding: 10px;
+}
+
+
 .search-bar {
     display: flex;
     justify-content: center;
