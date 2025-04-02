@@ -11,12 +11,12 @@ export class TrackService {
   constructor(private http: HttpClient) {}
 
   // Método para obtener las canciones recientes
-  getViewedTracks(email: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/viewed-tracks/${email}`);
+  getViewedTracks(username: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/viewed-tracks/${username}`);
   }
 
   // Método para guardar una canción vista
-  saveViewedTrack(email: string, track: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/viewed-tracks`, { email, track });
+  saveViewedTrack(username: string, track: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/viewed-tracks`, { username, track });
   }
 }

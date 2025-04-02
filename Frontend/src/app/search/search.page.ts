@@ -59,9 +59,9 @@ export class SearchPage {
 
     goToSongDetail(trackId: string) {
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    const email = currentUser.email; // Obtén el email del usuario actual
+    const username = currentUser.username; // Obtén el username del usuario actual
   
-    if (!email) {
+    if (!username) {
       console.error('No se encontró el usuario actual.');
       return;
     }
@@ -70,7 +70,7 @@ export class SearchPage {
   
     if (track) {
       // Usa el servicio para enviar la canción al backend
-      this.trackService.saveViewedTrack(email, track).subscribe({
+      this.trackService.saveViewedTrack(username, track).subscribe({
         next: (response) => {
           console.log('Canción guardada:', response);
         },
