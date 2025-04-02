@@ -44,6 +44,7 @@ import { HttpClient } from '@angular/common/http'; // Importa HttpClient
 export class HomePage implements OnInit, OnDestroy {
   isSidebarOpen = false; // Estado de la sidebar
   viewedTracks: any[] = []; // Canciones vistas
+  popularAlbums: any[] = []; // Álbumes populares
   private navigationSubscription!: Subscription; // Suscripción al evento de navegación
   private touchStartX = 0; // Coordenada inicial del toque
   username: string = ''; // Propiedad para almacenar el nombre de usuario
@@ -58,6 +59,7 @@ export class HomePage implements OnInit, OnDestroy {
   ngOnInit() {
     this.resetViewedTracks(); // Limpia las canciones vistas al cargar la página
     this.loadViewedTracks(); // Carga las canciones recientes del usuario actual
+    this.loadPopularAlbums(); // Cargar álbumes populares
 
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     this.username = currentUser.username || 'Usuario'; // Mostrar "Usuario" si no hay un nombre
@@ -66,6 +68,7 @@ export class HomePage implements OnInit, OnDestroy {
     this.navigationSubscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd && event.url === '/home') {
         this.loadViewedTracks(); // Carga las canciones recientes al navegar a HomePage
+        this.loadPopularAlbums(); // Recargar álbumes populares
       }
     });
   }
@@ -102,6 +105,18 @@ export class HomePage implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('Error al cargar las canciones recientes:', error);
+      },
+    });
+  }
+
+  loadPopularAlbums() {
+    this.trackService.getPopularAlbums().subscribe({
+      next: (response) => {
+        this.popularAlbums = response;
+        console.log('Álbumes populares cargados:', this.popularAlbums);
+      },
+      error: (error) => {
+        console.error('Error al cargar los álbumes populares:', error);
       },
     });
   }

@@ -92,25 +92,16 @@
   <div class="popular-albums">
     <h2>Álbumes y Sencillos Populares</h2>
     <div class="carousel">
-      <div class="carousel-item">
-        <img src="assets/images/album1.jpg" alt="Álbum 1" />
-        <span>Álbum 1</span>
-      </div>
-      <div class="carousel-item">
-        <img src="assets/images/album2.jpg" alt="Álbum 2" />
-        <span>Álbum 2</span>
-      </div>
-      <div class="carousel-item">
-        <img src="assets/images/album3.jpg" alt="Álbum 3" />
-        <span>Álbum 3</span>
-      </div>
-      <div class="carousel-item">
-        <img src="assets/images/album4.jpg" alt="Álbum 4" />
-        <span>Álbum 4</span>
-      </div>
-      <div class="carousel-item">
-        <img src="assets/images/album5.jpg" alt="Álbum 5" />
-        <span>Álbum 5</span>
+      <!-- Sección de Álbumes y Sencillos Populares -->
+      <div class="popular-albums" *ngIf="popularAlbums.length > 0">
+        <h2>Álbumes y Sencillos Populares</h2>
+        <div class="carousel">
+          <div class="carousel-item" *ngFor="let album of popularAlbums">
+            <img [src]="album.imageUrl" [alt]="album.name" />
+            <span>{{ album.name }}</span>
+            <small>{{ album.artists }}</small>
+          </div>
+        </div>
       </div>
     </div>
   </div>

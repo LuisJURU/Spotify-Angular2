@@ -97,6 +97,38 @@ router.get('/track/:id', authMiddleware, async (req, res) => {
   }
 });
 
+// Ruta para obtener álbumes y sencillos populares
+router.get('/popular', authMiddleware, async (req, res) => {
+  try {
+    // Obtén un token válido
+    const token = await getValidSpotifyAccessToken();
+
+    // Llama a la API de Spotify para obtener los álbumes y sencillos populares
+    const response = await axios.get('https://api.spotify.com/v1/browse/new-releases', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        limit: 10, // Número de álbumes/sencillos populares a obtener
+      },
+    });
+
+    // Estructura los datos relevantes
+    const albums = response.data.albums.items.map((album) => ({
+      id: album.id,
+      name: album.name,
+      artists: album.artists.map((artist) => artist.name).join(', '),
+      releaseDate: album.release_date,
+      imageUrl: album.images[0]?.url,
+    }));
+
+    res.json(albums); // Devuelve los datos al frontend
+  } catch (error) {
+    console.error('Error al obtener álbumes y sencillos populares:', error.response?.data || error.message);
+    res.status(500).json({ error: 'Error al obtener álbumes y sencillos populares', details: error.response?.data || error.message });
+  }
+});
+
 // Ruta para obtener la vista previa de una canción
 router.get('/preview', async (req, res) => {
   const { url } = req.query;
