@@ -46,8 +46,6 @@ export class HomePage implements OnInit, OnDestroy {
   isSidebarOpen = false; // Estado de la sidebar
   viewedTracks: any[] = []; // Canciones vistas
   popularAlbums: any[] = []; // Álbumes populares
-  recommendedSongs: any[] = []; // Canciones recomendadas
-  availableGenres: string[] = []; // Lista de géneros disponibles
   private navigationSubscription!: Subscription; // Suscripción al evento de navegación
   private touchStartX = 0; // Coordenada inicial del toque
   username: string = ''; // Propiedad para almacenar el nombre de usuario
@@ -64,8 +62,6 @@ export class HomePage implements OnInit, OnDestroy {
     this.resetViewedTracks(); // Limpia las canciones vistas al cargar la página
     this.loadViewedTracks(); // Carga las canciones recientes del usuario actual
     this.loadPopularAlbums(); // Cargar álbumes populares
-    this.loadRecommendedSongs(); // Cargar canciones recomendadas
-    this.loadAvailableGenres(); // Cargar géneros disponibles al iniciar la página
 
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     this.username = currentUser.username || 'Usuario'; // Mostrar "Usuario" si no hay un nombre
@@ -123,48 +119,6 @@ export class HomePage implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('Error al cargar los álbumes populares:', error);
-      },
-    });
-  }
-
-  loadRecommendedSongs() {
-    const seedTracks = this.viewedTracks.slice(0, 3).map((track) => track.id).join(','); // Usa las primeras 3 canciones vistas como semilla
-    const seedArtists = ''; // Puedes agregar IDs de artistas semilla si lo deseas
-    const seedGenres = 'pop'; // Género semilla (puedes cambiarlo dinámicamente)
-
-    this.musicService.getRecommendedSongs(seedTracks, seedArtists, seedGenres).subscribe({
-      next: (response) => {
-        this.recommendedSongs = response;
-        console.log('Canciones recomendadas cargadas:', this.recommendedSongs);
-      },
-      error: (error) => {
-        console.error('Error al cargar canciones recomendadas:', error);
-      },
-    });
-  }
-
-  loadAvailableGenres() {
-    this.musicService.getAvailableGenres().subscribe({
-      next: (genres) => {
-        this.availableGenres = genres;
-        console.log('Géneros disponibles:', this.availableGenres);
-      },
-      error: (error) => {
-        console.error('Error al cargar géneros disponibles:', error);
-      },
-    });
-  }
-
-  loadRecommendedSongsByGenre(genre: string) {
-    const seedGenres = genre; // Usa el género seleccionado como semilla
-
-    this.musicService.getRecommendedSongs('', '', seedGenres).subscribe({
-      next: (response) => {
-        this.recommendedSongs = response;
-        console.log('Canciones recomendadas cargadas:', this.recommendedSongs);
-      },
-      error: (error) => {
-        console.error('Error al cargar canciones recomendadas:', error);
       },
     });
   }
