@@ -80,9 +80,9 @@ export class HomePage implements OnInit, OnDestroy {
 
   loadViewedTracks() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    const email = currentUser.email; // Obtén el email del usuario actual
+    const username = currentUser.username; // Obtén el username del usuario actual
   
-    if (!email) {
+    if (!username) {
       console.error('No se encontró el usuario actual.');
       this.viewedTracks = [];
       return;
@@ -92,7 +92,7 @@ export class HomePage implements OnInit, OnDestroy {
     this.resetViewedTracks();
   
     // Usar el servicio para obtener las canciones recientes
-    this.trackService.getViewedTracks(email).subscribe({
+    this.trackService.getViewedTracks(username).subscribe({
       next: (response) => {
         this.viewedTracks = response; // Asigna las canciones obtenidas a la variable
         console.log('Canciones vistas cargadas:', this.viewedTracks);
