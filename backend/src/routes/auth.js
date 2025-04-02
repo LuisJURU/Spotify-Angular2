@@ -43,26 +43,26 @@ router.post('/register', async (req, res) => {
 
 // Inicio de sesión
 router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body; // Cambiado de email a username
 
-  if (!email || !password) {
+  if (!username || !password) {
     return res.status(400).json({ error: 'Todos los campos son obligatorios' });
   }
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ username }); // Buscar por username
     if (!user) {
-      return res.status(401).json({ error: 'Correo o contraseña incorrectos' });
+      return res.status(401).json({ error: 'Nombre de usuario o contraseña incorrectos' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ error: 'Correo o contraseña incorrectos' });
+      return res.status(401).json({ error: 'Nombre de usuario o contraseña incorrectos' });
     }
 
-    const token = jwt.sign({ id: user._id, email }, process.env.JWT_SECRET || 'secreto', { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id, username }, process.env.JWT_SECRET || 'secreto', { expiresIn: '1h' });
 
-    res.json({ token, user: { id: user._id, email }, mensaje: 'Inicio de sesión exitoso' });
+    res.json({ token, user: { id: user._id, username }, mensaje: 'Inicio de sesión exitoso' });
   } catch (error) {
     res.status(500).json({ error: 'Error al iniciar sesión: ' + error.message });
   }

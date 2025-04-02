@@ -11,11 +11,14 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  login(email: string, password: string) {
-    return this.http.post<{ token: string; user: { email: string } }>(`${this.apiUrl}/login`, { email, password }).pipe(
-      tap((response: { token: string; user: { email: any; }; }) => {
+  login(username: string, password: string) {
+    return this.http.post<{ token: string; user: { username: string } }>(
+      `${this.apiUrl}/login`,
+      { username, password }
+    ).pipe(
+      tap((response) => {
         this.saveToken(response.token);
-        localStorage.setItem('currentUser', JSON.stringify({ email: response.user.email })); // Guarda el email del usuario
+        localStorage.setItem('currentUser', JSON.stringify({ username: response.user.username })); // Guarda el username del usuario
       })
     );
   }
