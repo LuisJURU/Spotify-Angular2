@@ -6,22 +6,42 @@
       <form (ngSubmit)="register()">
         <ion-item class="custom-item">
           <ion-label position="floating">Nombre de Usuario</ion-label>
-          <ion-input type="text" [(ngModel)]="username" name="username" required></ion-input>
+          <ion-input
+            type="text"
+            [(ngModel)]="username"
+            name="username"
+            required
+          ></ion-input>
         </ion-item>
 
         <ion-item class="custom-item">
           <ion-label position="floating">Correo Electrónico</ion-label>
-          <ion-input type="email" [(ngModel)]="email" name="email" required></ion-input>
+          <ion-input
+            type="email"
+            [(ngModel)]="email"
+            name="email"
+            required
+          ></ion-input>
         </ion-item>
 
         <ion-item class="custom-item">
           <ion-label position="floating">Contraseña</ion-label>
-          <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
+          <ion-input
+            type="password"
+            [(ngModel)]="password"
+            name="password"
+            required
+          ></ion-input>
         </ion-item>
 
         <ion-item class="custom-item">
           <ion-label position="floating">Confirmar Contraseña</ion-label>
-          <ion-input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required></ion-input>
+          <ion-input
+            type="password"
+            [(ngModel)]="confirmPassword"
+            name="confirmPassword"
+            required
+          ></ion-input>
         </ion-item>
 
         <button type="submit" class="btn-register">Registrarse</button>
@@ -29,7 +49,12 @@
 
       <div class="nav-link">
         <p>¿Ya tienes una cuenta?</p>
-        <button onclick="window.location.href='/login'" class="custom-button">Inicia Sesión</button>
+        <button
+          (click)="navigateToLogin()"
+          class="custom-button"
+        >
+          Inicia Sesión
+        </button>
       </div>
     </div>
   </div>

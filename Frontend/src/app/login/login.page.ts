@@ -83,4 +83,8 @@ export class LoginPage {
       (error) => console.error('Error mostrando el toast:', error)
     );
   }
+
+  navigateToRegister() {
+    this.router.navigate(['/register']);
+  }
 }
