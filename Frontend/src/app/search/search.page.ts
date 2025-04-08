@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router'; // Importa el Router
 import { MusicService } from '../services/music.service';
 import { TrackService } from '../services/track.service'; // Importa el servicio
@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { HttpClient } from '@angular/common/http'; // Importa HttpClient
+import { ModalController } from '@ionic/angular'; // Importa ModalController
+import { PlaylistPage } from '../playlist/playlist.page'; // Importa la página de selección de playlist
 
 @Component({
   selector: 'app-search',
@@ -21,6 +23,7 @@ import { HttpClient } from '@angular/common/http'; // Importa HttpClient
   ]
 })
 export class SearchPage {
+  @Input() isModal: boolean = false; // Determina si el componente se usa como modal
   searchQuery: string = ''; // Consulta de búsqueda
   artist: any = null; // Artista principal
   tracks: any[] = []; // Canciones del artista
@@ -31,7 +34,8 @@ export class SearchPage {
     private musicService: MusicService,
     private router: Router,
     private trackService: TrackService, // Inyecta el servicio
-    private http: HttpClient // Inyecta HttpClient
+    private http: HttpClient, // Inyecta HttpClient
+    private modalController: ModalController // Inyecta ModalController
   ) {}
 
   search(query: string) {
@@ -57,7 +61,7 @@ export class SearchPage {
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   }
 
-    goToSongDetail(trackId: string) {
+  goToSongDetail(trackId: string) {
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     const username = currentUser.username; // Obtén el username del usuario actual
   
@@ -82,5 +86,26 @@ export class SearchPage {
   
     // Navegar a la página de detalles de la canción
     this.router.navigate(['/song-detail', trackId]);
+  }
+
+  async addToPlaylist(track: any) {
+    const modal = await this.modalController.create({
+      component: PlaylistPage, // Página para seleccionar una playlist
+      componentProps: {
+        track: track, // Pasar la canción seleccionada
+      },
+    });
+  
+    modal.onDidDismiss().then((result) => {
+      if (result.data) {
+        console.log('Canción agregada a la playlist:', result.data.playlistName);
+      }
+    });
+  
+    return await modal.present();
+  }
+
+  closeModal() {
+    this.modalController.dismiss();
   }
 }

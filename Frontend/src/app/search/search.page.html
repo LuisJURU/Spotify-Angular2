@@ -1,6 +1,9 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Buscar</ion-title>
+    <ion-title>Buscar Canciones</ion-title>
+    <ion-buttons slot="end" *ngIf="isModal">
+      <ion-button (click)="closeModal()">Cerrar</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -40,6 +43,7 @@
         <p>{{ track.artists }}</p>
         <p><strong>Álbum:</strong> {{ track.album }}</p>
         <p><strong>Duración:</strong> {{ formatDuration(track.durationMs) }}</p>
+        <ion-button size="small" (click)="addToPlaylist(track)">Agregar a Playlist</ion-button>
       </div>
     </div>
   </div>

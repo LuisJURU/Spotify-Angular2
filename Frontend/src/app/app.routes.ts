@@ -14,20 +14,26 @@ export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
-    canActivate: [AuthGuard], // Protege la ruta con el AuthGuard
+    canActivate: [AuthGuard],
   },
   {
     path: 'search',
     loadComponent: () => import('./search/search.page').then((m) => m.SearchPage),
-    canActivate: [AuthGuard], // Protege la ruta con el AuthGuard
+    canActivate: [AuthGuard],
   },
   {
-    path: 'song-detail/:id', // Ruta con parámetro para identificar la canción
+    path: 'song-detail/:id',
     loadComponent: () =>
       import('./song-detail/song-detail.page').then((m) => m.SongDetailPage),
-  },  {
-    path: 'register',
-    loadComponent: () => import('./register/register.page').then( m => m.RegisterPage)
   },
-
+  {
+    path: 'register',
+    loadComponent: () =>
+      import('./register/register.page').then((m) => m.RegisterPage),
+  },
+  {
+    path: 'playlist',
+    loadComponent: () =>
+      import('./playlist/playlist.page').then((m) => m.PlaylistPage),
+  },
 ];

@@ -105,6 +105,21 @@
     </div>
   </div>
 
+  <!-- Crear Playlist -->
+  <ion-button expand="block" (click)="openCreatePlaylistModal()">Crear Playlist</ion-button>
+
+  <div *ngIf="playlists.length > 0">
+    <h2>Mis Playlists</h2>
+    <ion-list>
+      <ion-item *ngFor="let playlist of playlists">
+        <ion-label>
+          <h2>{{ playlist.name }}</h2>
+          <p>{{ playlist.songs.length }} canciones</p>
+        </ion-label>
+        <ion-button slot="end" (click)="openEditPlaylistModal(playlist)">Editar</ion-button>
+      </ion-item>
+    </ion-list>
+  </div>
   
 </ion-content>
 

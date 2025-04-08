@@ -23,7 +23,7 @@ export class MusicService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, // Envía el token JWT
     });
-  
+
     return this.http.get<{ tracks: any[]; artists: any[] }>(`${this.apiUrl}/search`, { headers, params: { query } });
   }
 
@@ -31,9 +31,31 @@ export class MusicService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, // Envía el token JWT
     });
-  
+
     return this.http.get<any[]>(`${this.apiUrl}/popular`, { headers });
   }
 
-  
+  createPlaylist(name: string, songs: string[]): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, // Envía el token JWT
+    });
+
+    return this.http.post(`${this.apiUrl}/playlists`, { name, songs }, { headers });
+  }
+
+  getPlaylists(playlistId: string): Observable<any[]> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, // Envía el token JWT
+    });
+
+    return this.http.get<any[]>(`${this.apiUrl}/playlists`, { headers });
+  }
+
+  updatePlaylist(id: string, songs: string[]): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, // Envía el token JWT
+    });
+
+    return this.http.put(`${this.apiUrl}/playlists/${id}`, { songs }, { headers });
+  }
 }

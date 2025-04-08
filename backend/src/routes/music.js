@@ -5,6 +5,9 @@ const { getValidSpotifyAccessToken } = require('../utils/spotifyUtils'); // Impo
 
 const router = express.Router();
 
+// Array en memoria para almacenar las playlists
+const playlists = [];
+
 // Ruta para buscar canciones y artistas
 router.get('/search', authMiddleware, async (req, res) => {
   const { query } = req.query;
@@ -149,6 +152,47 @@ router.get('/preview', async (req, res) => {
     console.error('Error al obtener la vista previa:', error.message);
     res.status(500).json({ error: 'Error al obtener la vista previa' });
   }
+});
+
+// Ruta para crear una playlist
+router.post('/playlists', authMiddleware, (req, res) => {
+  const { name, songs } = req.body;
+
+  if (!name) {
+    return res.status(400).json({ error: 'El nombre de la playlist es obligatorio' });
+  }
+
+  const newPlaylist = {
+    id: Date.now(), // Genera un ID único
+    name,
+    songs: songs || [], // Lista de canciones asociadas
+  };
+
+  playlists.push(newPlaylist); // Guarda la playlist en el array en memoria
+  console.log('Nueva playlist creada:', newPlaylist);
+
+  res.status(201).json(newPlaylist);
+});
+
+// Ruta para obtener todas las playlists
+router.get('/playlists', authMiddleware, (req, res) => {
+  res.json(playlists); // Devuelve todas las playlists almacenadas
+});
+
+// Ruta para actualizar una playlist
+router.put('/playlists/:id', authMiddleware, (req, res) => {
+  const { id } = req.params;
+  const { songs } = req.body;
+
+  const playlist = playlists.find((p) => p.id === parseInt(id));
+
+  if (!playlist) {
+    return res.status(404).json({ error: 'Playlist no encontrada' });
+  }
+
+  // Agrega las nuevas canciones a la playlist
+  playlist.songs = [...new Set([...playlist.songs, ...songs])]; // Evita duplicados
+  res.status(200).json(playlist);
 });
 
 module.exports = router;

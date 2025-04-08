@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router'; // Importa NavigationEnd
-import { Subscription } from 'rxjs'; // Importa Subscription
+import { Router, NavigationEnd } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { MusicService } from '../services/music.service'; // Importa MusicService
-import { NavbarComponent } from '../navbar/navbar.component';
-import { TrackService } from '../services/track.service'; // Importa el servicio
+import { MusicService } from '../services/music.service';
+import { TrackService } from '../services/track.service';
+import { IonicModule } from '@ionic/angular';
 import {
   IonHeader,
   IonToolbar,
@@ -16,52 +16,48 @@ import {
   IonCard,
   IonCardContent,
   IonCardTitle,
-  IonImg,
   IonButtons,
-  IonIcon, } from '@ionic/angular/standalone';
-import { HttpClient } from '@angular/common/http'; // Importa HttpClient
+  IonIcon,
+  IonButton,
+  ModalController,
+} from '@ionic/angular/standalone';
+import { HttpClient } from '@angular/common/http';
+import { PlaylistPage } from '../playlist/playlist.page';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [ 
+  imports: [
     NavbarComponent,
-    IonIcon,
-    IonButtons,
-    IonCardContent,
-    IonCardTitle,
-    IonCard,
-    IonCol,
-    IonRow,
-    IonGrid,
-    IonHeader,
-    IonToolbar,
-    IonContent,
     CommonModule,
+    IonicModule, // Esto incluye todos los componentes de Ionic
   ],
 })
 export class HomePage implements OnInit, OnDestroy {
   isSidebarOpen = false; // Estado de la sidebar
   viewedTracks: any[] = []; // Canciones vistas
   popularAlbums: any[] = []; // Álbumes populares
+  playlists: any[] = []; // Lista de playlists
   private navigationSubscription!: Subscription; // Suscripción al evento de navegación
   private touchStartX = 0; // Coordenada inicial del toque
   username: string = ''; // Propiedad para almacenar el nombre de usuario
-
 
   constructor(
     private router: Router,
     private trackService: TrackService, // Inyecta el servicio
     private musicService: MusicService, // Usa MusicService
-    private http: HttpClient // Inyecta HttpClient
+    private http: HttpClient, // Inyecta HttpClient
+    private modalController: ModalController // Inyecta ModalController
   ) {}
 
   ngOnInit() {
     this.resetViewedTracks(); // Limpia las canciones vistas al cargar la página
     this.loadViewedTracks(); // Carga las canciones recientes del usuario actual
     this.loadPopularAlbums(); // Cargar álbumes populares
+    this.loadPlaylists(); // Carga las playlists al iniciar
 
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     this.username = currentUser.username || 'Usuario'; // Mostrar "Usuario" si no hay un nombre
@@ -123,6 +119,17 @@ export class HomePage implements OnInit, OnDestroy {
     });
   }
 
+  loadPlaylists() {
+    this.musicService.getPlaylists('defaultPlaylistId').subscribe({
+      next: (response) => {
+        this.playlists = response; // Carga las playlists desde el backend
+      },
+      error: (error) => {
+        console.error('Error al cargar las playlists:', error);
+      },
+    });
+  }
+
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen; // Cambia el estado de la sidebar
   }
@@ -160,5 +167,55 @@ export class HomePage implements OnInit, OnDestroy {
   
     // Redirige al usuario a la página de inicio de sesión
     this.router.navigate(['/login']);
+  }
+
+  async openCreatePlaylistModal() {
+    const modal = await this.modalController.create({
+      component: PlaylistPage,
+    });
+
+    modal.onDidDismiss().then((result) => {
+      if (result.data) {
+        const { playlistName, songs } = result.data;
+        console.log('Playlist creada:', playlistName);
+        console.log('Canciones seleccionadas:', songs);
+        this.savePlaylist(playlistName, songs);
+      }
+    });
+
+    return await modal.present();
+  }
+
+  async openEditPlaylistModal(playlist: any) {
+    const modal = await this.modalController.create({
+      component: PlaylistPage,
+      componentProps: {
+        playlistName: playlist.name,
+        selectedSongs: [...playlist.songs],
+        isEditMode: true,
+        playlistId: playlist.id,
+      },
+    });
+
+    modal.onDidDismiss().then((result) => {
+      if (result.data) {
+        console.log('Playlist actualizada:', result.data);
+        this.loadPlaylists();
+      }
+    });
+
+    return await modal.present();
+  }
+
+  savePlaylist(playlistName: string, songs: string[]) {
+    this.musicService.createPlaylist(playlistName, songs).subscribe({
+      next: (response) => {
+        console.log('Playlist guardada:', response);
+        this.playlists.push(response); // Agrega la nueva playlist a la lista local
+      },
+      error: (error) => {
+        console.error('Error al guardar la playlist:', error);
+      },
+    });
   }
 }
