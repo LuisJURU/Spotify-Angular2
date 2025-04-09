@@ -36,8 +36,13 @@ export class PlaylistListPage implements OnInit {
     this.musicService.getPlaylists(playlistId).subscribe({
       next: (playlist) => {
         console.log('Respuesta del backend:', playlist); // Verifica la respuesta
-        this.songs = playlist.songs || []; // Asegúrate de que `songs` sea un array
-        console.log('Canciones de la playlist cargadas:', this.songs);
+        if (playlist && playlist.songs) {
+          this.songs = playlist.songs; // Asigna las canciones
+          console.log('Canciones de la playlist cargadas:', this.songs);
+        } else {
+          console.warn('No se encontraron canciones en la playlist.');
+          this.songs = [];
+        }
       },
       error: (error) => {
         console.error('Error al cargar la playlist:', error);
