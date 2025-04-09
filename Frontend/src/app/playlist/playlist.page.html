@@ -11,20 +11,21 @@
     <ion-input [(ngModel)]="playlistName"></ion-input>
   </ion-item>
 
-  <div *ngIf="selectedSongs.length === 0; else playlistContent">
-    <ion-button expand="block" (click)="openAddSongModal()">Agregar Canción</ion-button>
-  </div>
+  <!-- Botón para agregar más canciones -->
+  <ion-button expand="block" (click)="openAddSongModal()">Agregar Canción</ion-button>
 
-  <ng-template #playlistContent>
-    <ion-list>
-      <ion-item *ngFor="let song of selectedSongs">
-        <ion-label>{{ song.name }}</ion-label>
-      </ion-item>
-    </ion-list>
-  </ng-template>
+  <!-- Lista de canciones seleccionadas -->
+  <ion-list>
+    <ion-item *ngFor="let song of selectedSongs">
+      <ion-label>
+        <h2>{{ song.name }}</h2>
+      </ion-label>
+      <ion-button slot="end" color="danger" (click)="removeSong(song.id)">Eliminar</ion-button>
+    </ion-item>
+  </ion-list>
 
-  <!-- Botón para confirmar la creación de la playlist -->
-  <ion-button expand="block" color="primary" (click)="savePlaylist()">Crear Playlist</ion-button>
+  <!-- Botón para guardar la playlist -->
+  <ion-button expand="block" color="primary" (click)="savePlaylist()">Guardar Playlist</ion-button>
 </ion-content>
 
 <app-navbar></app-navbar>
