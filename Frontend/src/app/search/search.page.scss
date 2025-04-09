@@ -47,16 +47,15 @@ ion-content {
   align-items: center;
   margin-bottom: 10px;
   background-color: #181818;
-  padding: 10px;
-  border-radius: 5px;
+  border-radius: 10px;
   color: #fff;
 }
 
 .artist-card img,
 .song-card img {
-  width: 60px;
-  height: 60px;
-  border-radius: 5px;
+  width: 120px;
+  height: 120px;
+  border-radius: 10px;
   margin-right: 10px;
 }
 
@@ -75,16 +74,12 @@ ion-content {
 
 .add-to-playlist-icon {
   cursor: pointer;
-  display: inline-block;
-  margin-top: 10px;
-
   svg {
-    fill: #ff4081; /* Color del ícono */
-    transition: transform 0.2s ease, fill 0.2s ease;
+    fill: gray; /* Color por defecto */
+    transition: fill 0.3s ease;
   }
 
-  &:hover svg {
-    transform: scale(1.2); /* Efecto de zoom al pasar el mouse */
-    fill: #e91e63; /* Cambiar color al pasar el mouse */
+  &.saved svg {
+    fill: rgb(136, 68, 131); /* Cambia a rojo cuando esté guardado */
   }
 }

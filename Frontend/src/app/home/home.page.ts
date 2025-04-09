@@ -34,19 +34,26 @@ export class HomePage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.resetViewedTracks(); // Limpia las canciones vistas al cargar la página
-    this.loadViewedTracks(); // Carga las canciones recientes del usuario actual
-    this.loadPopularAlbums(); // Cargar álbumes populares
-    this.loadPlaylists(); // Carga las playlists al iniciar
+    this.resetViewedTracks();
+    this.loadViewedTracks();
+    this.loadPopularAlbums();
+    this.loadPlaylists();
 
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    this.username = currentUser.username || 'Usuario'; // Mostrar "Usuario" si no hay un nombre
+    this.username = currentUser.username || 'Usuario';
 
-    // Suscríbete al evento de navegación
+    // Suscríbete al evento de creación de playlists
+    this.musicService.playlistCreated$.subscribe((newPlaylist) => {
+      if (newPlaylist) {
+        this.playlists.push(newPlaylist); // Agrega la nueva playlist a la lista
+        console.log('Nueva playlist añadida:', newPlaylist);
+      }
+    });
+
     this.navigationSubscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd && event.url === '/home') {
-        this.loadViewedTracks(); // Carga las canciones recientes al navegar a HomePage
-        this.loadPopularAlbums(); // Recargar álbumes populares
+        this.loadViewedTracks();
+        this.loadPopularAlbums();
       }
     });
   }
