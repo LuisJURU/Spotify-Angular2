@@ -28,6 +28,8 @@ ion-button {
 .track-item {
   display: flex;
   height: 60px;
+  margin-left: 5px;
+  margin-right: 5px;
   flex-direction: row;
   align-items: center;
   background: #181818;
@@ -86,6 +88,7 @@ ion-button {
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
   transition: left 0.3s ease;
   z-index: 1000;
+  padding-top: 60px; /* Agrega espacio para evitar que quede muy arriba */
 }
 
 .sidebar.open {
@@ -99,11 +102,6 @@ ion-button {
   padding: 15px;
   background-color: #202020;
   border-bottom: 1px solid #333;
-}
-
-.sidebar-header h2 {
-  margin: 0;
-  font-size: 18px;
 }
 
 .sidebar-header .close-btn {
