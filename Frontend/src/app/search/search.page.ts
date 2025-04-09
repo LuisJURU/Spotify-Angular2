@@ -89,20 +89,13 @@ export class SearchPage {
   }
 
   async addToPlaylist(track: any) {
-    const modal = await this.modalController.create({
-      component: PlaylistPage, // Página para seleccionar una playlist
-      componentProps: {
-        track: track, // Pasar la canción seleccionada
+    // Redirige a la página de la playlist con los datos de la canción seleccionada
+    this.router.navigate(['/playlist'], {
+      queryParams: {
+        trackId: track.id,
+        trackName: track.name,
       },
     });
-  
-    modal.onDidDismiss().then((result) => {
-      if (result.data) {
-        console.log('Canción agregada a la playlist:', result.data.playlistName);
-      }
-    });
-  
-    return await modal.present();
   }
 
   closeModal() {

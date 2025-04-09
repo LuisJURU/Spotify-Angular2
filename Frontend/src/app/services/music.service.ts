@@ -52,11 +52,11 @@ export class MusicService {
     return this.http.get<any>(url, { headers });
   }
 
-  updatePlaylist(id: string, songs: any[]): Observable<any> {
+  updatePlaylist(id: string, data: { name: string; songs: any[] }): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, // Envía el token JWT
     });
   
-    return this.http.put(`${this.apiUrl}/playlists/${id}`, { songs }, { headers });
+    return this.http.put(`${this.apiUrl}/playlists/${id}`, data, { headers });
   }
 }

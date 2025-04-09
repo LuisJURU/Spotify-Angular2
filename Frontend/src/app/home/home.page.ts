@@ -5,11 +5,6 @@ import { CommonModule } from '@angular/common';
 import { MusicService } from '../services/music.service';
 import { TrackService } from '../services/track.service';
 import { IonicModule } from '@ionic/angular';
-import {
-  ModalController,
-} from '@ionic/angular/standalone';
-import { HttpClient } from '@angular/common/http';
-import { PlaylistPage } from '../playlist/playlist.page';
 import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
@@ -35,9 +30,7 @@ export class HomePage implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private trackService: TrackService, // Inyecta el servicio
-    private musicService: MusicService, // Usa MusicService
-    private http: HttpClient, // Inyecta HttpClient
-    private modalController: ModalController // Inyecta ModalController
+    private musicService: MusicService // Usa MusicService
   ) {}
 
   ngOnInit() {
@@ -156,42 +149,13 @@ export class HomePage implements OnInit, OnDestroy {
     this.router.navigate(['/login']);
   }
 
-  async openCreatePlaylistModal() {
-    const modal = await this.modalController.create({
-      component: PlaylistPage,
-    });
-
-    modal.onDidDismiss().then((result) => {
-      if (result.data) {
-        const { playlistName, songs } = result.data;
-        console.log('Playlist creada:', playlistName);
-        console.log('Canciones seleccionadas:', songs);
-        this.savePlaylist(playlistName, songs);
-      }
-    });
-
-    return await modal.present();
-  }
-
-  async openEditPlaylistModal(playlist: any) {
-    const modal = await this.modalController.create({
-      component: PlaylistPage,
-      componentProps: {
-        playlistName: playlist.name,
-        selectedSongs: [...playlist.songs],
-        isEditMode: true,
-        playlistId: playlist.id,
+  editPlaylist(playlist: any) {
+    this.router.navigate(['/playlist-list'], {
+      queryParams: {
+        playlistId: playlist.id, // ID de la playlist
+        playlistName: playlist.name, // Nombre de la playlist
       },
     });
-
-    modal.onDidDismiss().then((result) => {
-      if (result.data) {
-        console.log('Playlist actualizada:', result.data);
-        this.loadPlaylists();
-      }
-    });
-
-    return await modal.present();
   }
 
   savePlaylist(playlistName: string, songs: string[]) {
