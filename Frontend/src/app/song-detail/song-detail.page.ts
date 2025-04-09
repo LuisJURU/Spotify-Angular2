@@ -39,7 +39,14 @@ artist: any;
   loadSongDetail(songId: string) {
     this.musicService.getSongById(songId).subscribe((response) => {
       this.song = response;
-      this.artistNames = this.song.artists.map((a: any) => a.name).join(', '); // Calcula los nombres de los artistas
+  
+      // Verifica que 'artists' sea un arreglo y extrae los nombres
+      if (this.song.artists && Array.isArray(this.song.artists)) {
+        this.artistNames = this.song.artists.map((artist: any) => artist.name).join(', ');
+      } else {
+        console.error('La respuesta no contiene artistas válidos.');
+        this.artistNames = 'Artista desconocido';
+      }
     });
   }
 
