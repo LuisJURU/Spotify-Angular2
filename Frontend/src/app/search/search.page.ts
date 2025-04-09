@@ -29,6 +29,7 @@ export class SearchPage {
   tracks: any[] = []; // Canciones del artista
   musicResults: any[] = []; // Resultados de canciones
   artistResults: any[] = []; // Resultados de artistas
+  savedTracks: Set<string> = new Set(); // Almacena los IDs de las canciones guardadas
 
   constructor(
     private musicService: MusicService,
@@ -89,6 +90,15 @@ export class SearchPage {
   }
 
   async addToPlaylist(track: any) {
+    // Alterna el estado de guardado de la canción
+    if (this.savedTracks.has(track.id)) {
+      this.savedTracks.delete(track.id); // Elimina de la lista de guardados
+      console.log(`Canción eliminada de la playlist: ${track.name}`);
+    } else {
+      this.savedTracks.add(track.id); // Agrega a la lista de guardados
+      console.log(`Canción guardada en la playlist: ${track.name}`);
+    }
+
     // Redirige a la página de la playlist con los datos de la canción seleccionada
     this.router.navigate(['/playlist'], {
       queryParams: {

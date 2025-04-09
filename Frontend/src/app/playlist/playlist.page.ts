@@ -100,6 +100,7 @@ export class PlaylistPage implements OnInit {
       this.musicService.createPlaylist(this.playlistName, this.selectedSongs).subscribe({
         next: (response) => {
           console.log('Playlist creada:', response);
+          this.musicService.notifyPlaylistCreated(response); // Notifica la creación
           this.router.navigate(['/home']); // Redirige al home después de guardar
         },
         error: (error) => {

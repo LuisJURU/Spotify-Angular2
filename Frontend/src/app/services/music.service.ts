@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MusicService {
   private apiUrl = 'https://spotify-angular2-yoli.vercel.app/api/music'; // URL del backend
+  private playlistCreatedSubject = new BehaviorSubject<any>(null); // Emisor de eventos para playlists
+  playlistCreated$ = this.playlistCreatedSubject.asObservable(); // Observable para escuchar eventos
 
   constructor(private http: HttpClient) {}
 
@@ -40,7 +41,8 @@ export class MusicService {
       Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, // Envía el token JWT
     });
   
-    return this.http.post(`${this.apiUrl}/playlists`, { name, songs }, { headers });
+    const payload = { name, songs };
+    return this.http.post(`${this.apiUrl}/playlists`, payload, { headers });
   }
 
   getPlaylists(playlistId?: string): Observable<any> {
@@ -58,5 +60,9 @@ export class MusicService {
     });
   
     return this.http.put(`${this.apiUrl}/playlists/${id}`, data, { headers });
+  }
+
+  notifyPlaylistCreated(playlist: any) {
+    this.playlistCreatedSubject.next(playlist); // Notifica que se creó una nueva playlist
   }
 }
