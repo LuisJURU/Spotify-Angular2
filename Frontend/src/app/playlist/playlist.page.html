@@ -1,9 +1,6 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>{{ playlistName || 'Nueva Playlist' }}</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="closeModal()">Cerrar</ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -29,3 +26,5 @@
   <!-- Botón para confirmar la creación de la playlist -->
   <ion-button expand="block" color="primary" (click)="savePlaylist()">Crear Playlist</ion-button>
 </ion-content>
+
+<app-navbar></app-navbar>

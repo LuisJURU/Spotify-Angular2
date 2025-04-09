@@ -6,19 +6,6 @@ import { MusicService } from '../services/music.service';
 import { TrackService } from '../services/track.service';
 import { IonicModule } from '@ionic/angular';
 import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonGrid,
-  IonRow,
-  IonCol,
-  IonCard,
-  IonCardContent,
-  IonCardTitle,
-  IonButtons,
-  IonIcon,
-  IonButton,
   ModalController,
 } from '@ionic/angular/standalone';
 import { HttpClient } from '@angular/common/http';
@@ -120,9 +107,9 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   loadPlaylists() {
-    this.musicService.getPlaylists('defaultPlaylistId').subscribe({
+    this.musicService.getPlaylists().subscribe({
       next: (response) => {
-        this.playlists = response; // Carga las playlists desde el backend
+        this.playlists = response; // Carga todas las playlists desde el backend
       },
       error: (error) => {
         console.error('Error al cargar las playlists:', error);

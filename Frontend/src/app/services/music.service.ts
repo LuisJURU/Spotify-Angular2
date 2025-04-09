@@ -35,27 +35,28 @@ export class MusicService {
     return this.http.get<any[]>(`${this.apiUrl}/popular`, { headers });
   }
 
-  createPlaylist(name: string, songs: string[]): Observable<any> {
+  createPlaylist(name: string, songs: any[]): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, // Envía el token JWT
     });
-
+  
     return this.http.post(`${this.apiUrl}/playlists`, { name, songs }, { headers });
   }
 
-  getPlaylists(playlistId: string): Observable<any[]> {
+  getPlaylists(playlistId?: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, // Envía el token JWT
     });
-
-    return this.http.get<any[]>(`${this.apiUrl}/playlists`, { headers });
+  
+    const url = playlistId ? `${this.apiUrl}/playlists/${playlistId}` : `${this.apiUrl}/playlists`;
+    return this.http.get<any>(url, { headers });
   }
 
-  updatePlaylist(id: string, songs: string[]): Observable<any> {
+  updatePlaylist(id: string, songs: any[]): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, // Envía el token JWT
     });
-
+  
     return this.http.put(`${this.apiUrl}/playlists/${id}`, { songs }, { headers });
   }
 }
