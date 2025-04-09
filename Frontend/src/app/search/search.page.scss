@@ -74,21 +74,17 @@ ion-content {
 }
 
 .add-to-playlist-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   cursor: pointer;
+  display: inline-block;
   margin-top: 10px;
 
   svg {
-    width: 24px;
-    height: 24px;
-    fill: #1db954; /* Color verde similar a Spotify */
+    fill: #ff4081; /* Color del ícono */
     transition: transform 0.2s ease, fill 0.2s ease;
   }
 
   &:hover svg {
-    transform: scale(1.2); /* Efecto de agrandamiento al pasar el mouse */
-    fill: #1ed760; /* Color más claro al pasar el mouse */
+    transform: scale(1.2); /* Efecto de zoom al pasar el mouse */
+    fill: #e91e63; /* Cambiar color al pasar el mouse */
   }
 }
