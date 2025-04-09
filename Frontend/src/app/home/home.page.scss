@@ -17,89 +17,45 @@ ion-button {
 }
 
 /* Canciones Recientes */
-.viewed-tracks {
-  margin-bottom: 20px;
+.track-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Dos columnas por lado */
+  gap: 15px; /* Espaciado entre elementos */
 }
 
-.viewed-tracks h2 {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
 
-.viewed-tracks ion-card {
+
+.track-item {
   display: flex;
+  height: 60px;
+  flex-direction: row;
   align-items: center;
-  padding: 10px;
   background: #181818;
-  color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.track-item:hover {
+  transform: scale(1.05);
 }
 
 .track-image {
-  width: 60px; /* Ajusta el ancho según sea necesario */
-  height: 50px; /* Ajusta la altura según sea necesario */
-  border-radius: 5px; /* Bordes redondeados */
-  object-fit: cover; /* Escala la imagen para llenar el espacio sin deformarla */
+  padding: 0; /* Elimina el padding para evitar desalineación */
+  width: 60px; /* Asegura que la imagen sea cuadrada */
+  border-radius: 10px;
+  object-fit: cover; /* Escala la imagen para llenar el contenedor sin deformarse */
   object-position: center; /* Centra la imagen dentro del contenedor */
-  margin-right: 10px;
 }
 
-
-.viewed-tracks ion-card:hover {
-  transform: scale(1.05);
-}
-
-.viewed-tracks ion-card-title {
-  font-size: 12px;
-  font-weight: bold;
-  color: #fff;
-}
-
-.viewed-tracks ion-card {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  background: #181818;
-  color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s ease-in-out;
-  margin-bottom: 5px; /* Reduce el margen inferior */
-}
-
-.viewed-tracks ion-card.horizontal-card:hover {
-  transform: scale(1.02);
-}
-
-.viewed-tracks ion-card.horizontal-card ion-card-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0;
-}
-
-
-/* Cuadrícula de canciones */
-ion-card {
-  background: #181818;
-  color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s ease-in-out;
-  // padding: 10px;
-}
-
-ion-card:hover {
-  transform: scale(1.05);
-}
-
-ion-card-title {
+.track-info h3 {
   font-size: 14px;
   font-weight: bold;
   color: #fff;
+  text-align: center;
+  margin: 0;
+  margin-left: 5px;
 }
 
 /* Botón circular */

@@ -50,42 +50,18 @@
   <!-- Canciones Vistas -->
   <div class="viewed-tracks" *ngIf="viewedTracks.length > 0">
     <h2>Canciones Recientes</h2>
-    <ion-grid>
-      <ion-row>
-        <ion-col size="6">
-          <ion-card
-            class="horizontal-card"
-            *ngFor="let track of viewedTracks | slice:0:3"
-            (click)="goToSongDetail(track.id)"
-          >
-            <img
-              [src]="track.imageUrl"
-              alt="Portada del álbum"
-              class="track-image"
-            />
-            <ion-card-content>
-              <ion-card-title>{{ track.name }}</ion-card-title>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-        <ion-col size="6">
-          <ion-card
-            class="horizontal-card"
-            *ngFor="let track of viewedTracks | slice:3:6"
-            (click)="goToSongDetail(track.id)"
-          >
-            <img
-              [src]="track.imageUrl"
-              alt="Portada del álbum"
-              class="track-image"
-            />
-            <ion-card-content>
-              <ion-card-title>{{ track.name }}</ion-card-title>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+    <div class="track-grid">
+      <div class="track-item" *ngFor="let track of viewedTracks | slice:0:6" (click)="goToSongDetail(track.id)">
+        <img
+          class="track-image"
+          [src]="track.imageUrl"
+          [alt]="track.name"
+        />
+        <div class="track-info">
+          <h3>{{ track.name }}</h3>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Sección de Álbumes y Sencillos Populares -->
