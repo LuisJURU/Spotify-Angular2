@@ -150,7 +150,7 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   editPlaylist(playlist: any) {
-    this.router.navigate(['/playlist'], {
+    this.router.navigate(['/playlist-list'], {
       queryParams: {
         playlistId: playlist.id, // ID de la playlist
         playlistName: playlist.name, // Nombre de la playlist

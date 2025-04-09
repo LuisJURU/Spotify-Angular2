@@ -25,15 +25,28 @@ export const routes: Routes = [
     path: 'song-detail/:id',
     loadComponent: () =>
       import('./song-detail/song-detail.page').then((m) => m.SongDetailPage),
+    canActivate: [AuthGuard],
+
   },
   {
     path: 'register',
     loadComponent: () =>
       import('./register/register.page').then((m) => m.RegisterPage),
+    
   },
   {
     path: 'playlist',
     loadComponent: () =>
       import('./playlist/playlist.page').then((m) => m.PlaylistPage),
+    canActivate: [AuthGuard],
+
   },
+  {
+    path: 'playlist-list',
+    loadComponent: () => import('./playlist-list/playlist-list.page').then( m => m.PlaylistListPage),
+    canActivate: [AuthGuard],
+
+  },
+
+  
 ];
