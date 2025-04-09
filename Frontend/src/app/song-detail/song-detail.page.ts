@@ -40,11 +40,12 @@ artist: any;
     this.musicService.getSongById(songId).subscribe((response) => {
       this.song = response;
   
-      // Verifica que 'artists' sea un arreglo y extrae los nombres
+      // Log para verificar la respuesta completa
+  
+      // Verifica si 'artists' es un arreglo de cadenas
       if (this.song.artists && Array.isArray(this.song.artists)) {
-        this.artistNames = this.song.artists.map((artist: any) => artist.name).join(', ');
+        this.artistNames = this.song.artists.join(', '); // Une los nombres de los artistas
       } else {
-        console.error('La respuesta no contiene artistas válidos.');
         this.artistNames = 'Artista desconocido';
       }
     });

@@ -1,83 +1,74 @@
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
-import { CommonModule } from '@angular/common';
-import { ModalController } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 import { MusicService } from '../services/music.service';
 import { SearchPage } from '../search/search.page';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { i } from '@angular/core/weak_ref.d-Bp6cSy-X';
+import { NavbarComponent } from '../navbar/navbar.component';
+
 
 @Component({
   selector: 'app-playlist',
   templateUrl: './playlist.page.html',
   styleUrls: ['./playlist.page.scss'],
   standalone: true,
-  imports: [
-    FormsModule,
-    IonicModule,
-    CommonModule,
-  ],
+  imports: [CommonModule, FormsModule, IonicModule, NavbarComponent],
 })
 export class PlaylistPage implements OnInit {
   playlistName: string = '';
-  availableSongs: { id: string; name: string }[] = [];
   selectedSongs: { id: string; name: string }[] = [];
   isEditMode: boolean = false;
   playlistId: string | null = null;
 
-  constructor(private modalController: ModalController, private musicService: MusicService) {}
+  constructor(
+    private modalController: ModalController,
+    private musicService: MusicService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     if (this.playlistId) {
-      this.loadPlaylist(this.playlistId); // Carga la playlist existente si se está editando
+      this.loadPlaylist(this.playlistId);
     }
   }
 
   loadPlaylist(playlistId: string) {
-      this.musicService.getPlaylists(playlistId).subscribe({
-        next: (playlists: any[]) => {
-          const playlist = playlists.find(p => p.id === playlistId);
-          if (playlist) {
-            this.playlistName = playlist.name;
-            this.selectedSongs = playlist.songs; // Carga las canciones existentes
-          }
-        },
-        error: (error) => {
-          console.error('Error al cargar la playlist:', error);
-        },
-      });
+    if (!playlistId) {
+      console.error('El ID de la playlist es inválido.');
+      return;
     }
 
-  toggleSongSelection(song: { id: string; name: string }) {
-    const index = this.selectedSongs.findIndex((s) => s.id === song.id);
-    if (index > -1) {
-      this.selectedSongs.splice(index, 1); // Elimina la canción si ya está seleccionada
-    } else {
-      this.selectedSongs.push(song); // Agrega la canción si no está seleccionada
-    }
+    this.musicService.getPlaylists(playlistId).subscribe({
+      next: (playlist) => {
+        this.playlistName = playlist.name;
+        this.selectedSongs = playlist.songs;
+      },
+      error: (error) => {
+        console.error('Error al cargar la playlist:', error);
+      },
+    });
   }
 
   async openAddSongModal() {
     const modal = await this.modalController.create({
-      component: SearchPage, // Página de búsqueda para seleccionar canciones
+      component: SearchPage,
       componentProps: {
-        isAddingToPlaylist: true, // Propiedad para diferenciar el uso
-        isModal: true, // Indica que el componente se está usando como modal
+        isAddingToPlaylist: true,
       },
     });
 
     modal.onDidDismiss().then((result) => {
       if (result.data) {
-        // Asegúrate de que las canciones seleccionadas incluyan id y name
-        this.selectedSongs.push(...result.data.songs);
+        const newSongs = result.data.songs.filter(
+          (newSong: { id: string }) => !this.selectedSongs.some((song) => song.id === newSong.id)
+        );
+        this.selectedSongs.push(...newSongs);
       }
     });
 
     return await modal.present();
-  }
-
-  editPlaylist() {
-    console.log('Editar playlist');
-    // Aquí puedes agregar lógica adicional para editar la playlist
   }
 
   savePlaylist() {
@@ -87,31 +78,25 @@ export class PlaylistPage implements OnInit {
     }
 
     if (this.isEditMode && this.playlistId) {
-      // Editar una playlist existente
-      this.musicService.updatePlaylist(this.playlistId, this.selectedSongs.map(song => song.id)).subscribe({
+      this.musicService.updatePlaylist(this.playlistId, this.selectedSongs).subscribe({
         next: (response) => {
           console.log('Playlist actualizada:', response);
-          this.modalController.dismiss(response);
+          this.router.navigate(['/home']);
         },
         error: (error) => {
           console.error('Error al actualizar la playlist:', error);
         },
       });
     } else {
-      // Crear una nueva playlist
-      this.musicService.createPlaylist(this.playlistName, this.selectedSongs.map(song => song.id)).subscribe({
+      this.musicService.createPlaylist(this.playlistName, this.selectedSongs).subscribe({
         next: (response) => {
           console.log('Playlist creada:', response);
-          this.modalController.dismiss(response);
+          this.router.navigate(['/home']);
         },
         error: (error) => {
           console.error('Error al crear la playlist:', error);
         },
       });
     }
-  }
-
-  closeModal() {
-    this.modalController.dismiss();
   }
 }

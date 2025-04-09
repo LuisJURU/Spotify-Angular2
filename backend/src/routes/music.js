@@ -155,44 +155,84 @@ router.get('/preview', async (req, res) => {
 });
 
 // Ruta para crear una playlist
-router.post('/playlists', authMiddleware, (req, res) => {
+const Playlist = require('../models/Playlist'); // Importa el modelo de Playlist
+
+router.post('/playlists', authMiddleware, async (req, res) => {
   const { name, songs } = req.body;
+  const userId = req.user.id; // ID del usuario autenticado
 
   if (!name) {
     return res.status(400).json({ error: 'El nombre de la playlist es obligatorio' });
   }
 
-  const newPlaylist = {
-    id: Date.now(), // Genera un ID único
-    name,
-    songs: songs || [], // Lista de canciones asociadas
-  };
+  try {
+    const newPlaylist = new Playlist({
+      name,
+      songs: songs || [],
+      createdBy: userId,
+    });
 
-  playlists.push(newPlaylist); // Guarda la playlist en el array en memoria
-  console.log('Nueva playlist creada:', newPlaylist);
-
-  res.status(201).json(newPlaylist);
+    const savedPlaylist = await newPlaylist.save();
+    console.log('Nueva playlist creada:', savedPlaylist);
+    res.status(201).json(savedPlaylist);
+  } catch (error) {
+    console.error('Error al crear la playlist:', error);
+    res.status(500).json({ error: 'Error al crear la playlist' });
+  }
 });
 
-// Ruta para obtener todas las playlists
-router.get('/playlists', authMiddleware, (req, res) => {
-  res.json(playlists); // Devuelve todas las playlists almacenadas
+// Ruta para obtener todas las playlists del usuario autenticado
+router.get('/playlists', authMiddleware, async (req, res) => {
+  const userId = req.user.id; // ID del usuario autenticado
+
+  try {
+    const playlists = await Playlist.find({ createdBy: userId }); // Filtra por usuario
+    res.json(playlists);
+  } catch (error) {
+    console.error('Error al obtener las playlists:', error);
+    res.status(500).json({ error: 'Error al obtener las playlists' });
+  }
+});
+
+// Ruta para obtener una playlist específica por ID
+router.get('/playlists/:id', authMiddleware, async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const playlist = await Playlist.findById(id);
+
+    if (!playlist) {
+      return res.status(404).json({ error: 'Playlist no encontrada' });
+    }
+
+    res.json(playlist);
+  } catch (error) {
+    console.error('Error al obtener la playlist:', error);
+    res.status(500).json({ error: 'Error al obtener la playlist' });
+  }
 });
 
 // Ruta para actualizar una playlist
-router.put('/playlists/:id', authMiddleware, (req, res) => {
+router.put('/playlists/:id', authMiddleware, async (req, res) => {
   const { id } = req.params;
   const { songs } = req.body;
 
-  const playlist = playlists.find((p) => p.id === parseInt(id));
+  try {
+    const updatedPlaylist = await Playlist.findByIdAndUpdate(
+      id,
+      { $set: { songs } },
+      { new: true }
+    );
 
-  if (!playlist) {
-    return res.status(404).json({ error: 'Playlist no encontrada' });
+    if (!updatedPlaylist) {
+      return res.status(404).json({ error: 'Playlist no encontrada' });
+    }
+
+    res.json(updatedPlaylist);
+  } catch (error) {
+    console.error('Error al actualizar la playlist:', error);
+    res.status(500).json({ error: 'Error al actualizar la playlist' });
   }
-
-  // Agrega las nuevas canciones a la playlist
-  playlist.songs = [...new Set([...playlist.songs, ...songs])]; // Evita duplicados
-  res.status(200).json(playlist);
 });
 
 module.exports = router;
