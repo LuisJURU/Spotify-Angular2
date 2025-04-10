@@ -62,6 +62,23 @@ export class MusicService {
     return this.http.put(`${this.apiUrl}/playlists/${id}`, data, { headers });
   }
 
+  deletePlaylist(playlistId: string): Observable<any> {
+    console.log('Eliminando playlist con ID:', playlistId); // Depuración
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, // Envía el token JWT
+    });
+
+    return this.http.delete(`${this.apiUrl}/playlists/${playlistId}`, { headers });
+  }
+
+  deleteSongFromPlaylist(playlistId: string, songId: string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, // Envía el token JWT
+    });
+
+    return this.http.delete(`${this.apiUrl}/playlists/${playlistId}/songs/${songId}`, { headers });
+  }
+
   notifyPlaylistCreated(playlist: any) {
     this.playlistCreatedSubject.next(playlist); // Notifica que se creó una nueva playlist
   }
