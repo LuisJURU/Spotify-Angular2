@@ -244,5 +244,13 @@ export class HomePage implements OnInit, OnDestroy {
 
     await alert.present();
   }
-  
+
+  goToPlaylistDetail(playlist: any) {
+    this.router.navigate(['/playlist-list'], {
+      queryParams: {
+        playlistId: playlist.id, // ID de la playlist
+        playlistName: playlist.name, // Nombre de la playlist
+      },
+    });
+  }
 }

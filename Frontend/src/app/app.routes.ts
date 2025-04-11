@@ -46,7 +46,11 @@ export const routes: Routes = [
     loadComponent: () => import('./playlist-list/playlist-list.page').then( m => m.PlaylistListPage),
     canActivate: [AuthGuard],
 
+  },  {
+    path: 'add-playlist',
+    loadComponent: () => import('./add-playlist/add-playlist.page').then( m => m.AddPlaylistPage)
   },
+
 
   
 ];

@@ -1,0 +1,26 @@
+<ion-header *ngIf="isModal">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="closeModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 1024 1024" style="fill: #ffffff;">
+          <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"/>
+          <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"/>
+        </svg>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Agregar a Playlist</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let playlist of playlists" (click)="addToPlaylist(playlist.id)">
+      <ion-label>{{ playlist.name }}</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-item>
+    <ion-input placeholder="Nueva Playlist" [(ngModel)]="newPlaylistName"></ion-input>
+    <ion-button (click)="createPlaylist()">Crear</ion-button>
+  </ion-item>
+</ion-content>
