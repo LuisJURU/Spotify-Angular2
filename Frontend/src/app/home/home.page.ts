@@ -215,7 +215,7 @@ export class HomePage implements OnInit, OnDestroy {
       console.error('El objeto playlist no tiene un ID válido:', playlist);
       return;
     }
-
+  
     const alert = await this.alertController.create({
       header: 'Confirmar eliminación',
       message: `¿Estás seguro de que deseas eliminar la playlist "${playlist.name}"?`,
@@ -227,7 +227,8 @@ export class HomePage implements OnInit, OnDestroy {
         {
           text: 'Eliminar',
           role: 'destructive',
-          handler: () => {  
+          handler: () => {
+            console.log('ID de la playlist a eliminar:', playlist.id); // Depuración
             this.musicService.deletePlaylist(playlist.id).subscribe({
               next: (response) => {
                 console.log('Playlist eliminada:', response);
@@ -241,7 +242,7 @@ export class HomePage implements OnInit, OnDestroy {
         },
       ],
     });
-
+  
     await alert.present();
   }
 

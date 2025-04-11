@@ -37,11 +37,7 @@ export class PlaylistListPage implements OnInit {
       next: (playlist) => {
         console.log('Respuesta del backend:', playlist); // Depuración
         if (playlist && playlist.songs) {
-          // Mapea `_id` a `id` en las canciones si es necesario
-          this.songs = playlist.songs.map((song: any) => ({
-            ...song,
-            id: song._id, // Mapea `_id` a `id`
-          }));
+          this.songs = playlist.songs; // No es necesario mapear `_id` a `id`
           console.log('Canciones de la playlist cargadas:', this.songs);
         } else {
           console.warn('No se encontraron canciones en la playlist.');
