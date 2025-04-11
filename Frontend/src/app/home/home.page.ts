@@ -26,6 +26,7 @@ export class HomePage implements OnInit, OnDestroy {
   private navigationSubscription!: Subscription; // Suscripción al evento de navegación
   private touchStartX = 0; // Coordenada inicial del toque
   username: string = ''; // Propiedad para almacenar el nombre de usuario
+  selectedPlaylist: any = null;
 
   constructor(
     private router: Router,
@@ -264,5 +265,13 @@ export class HomePage implements OnInit, OnDestroy {
         playlistName: playlist.name, // Nombre de la playlist
       },
     });
+  }
+
+  toggleDropdown(playlist: any) {
+    this.selectedPlaylist = this.selectedPlaylist === playlist ? null : playlist;
+  }
+
+  closeDropdown() {
+    this.selectedPlaylist = null;
   }
 }
