@@ -1,11 +1,7 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Buscar Canciones</ion-title>
-    <ion-buttons slot="end" *ngIf="isModal">
-      <ion-button (click)="closeModal()">Cerrar</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<div class="custom-header">
+  <h1>Buscar Canciones</h1>
+  <button *ngIf="isModal" class="close-button" (click)="closeModal()">Cerrar</button>
+</div>
 
 <ion-content>
   <!-- Barra de búsqueda con HTML normal -->

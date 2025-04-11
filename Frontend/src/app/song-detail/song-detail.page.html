@@ -1,11 +1,9 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home"></ion-back-button>
-    </ion-buttons>
-    <ion-title>{{ song?.name }}</ion-title>
-  </ion-toolbar>
-</ion-header>
+<div class="custom-header">
+  <button class="back-button" (click)="goBack()">
+    ←
+  </button>
+  <h1>{{ song?.name }}</h1>
+</div>
 
 <ion-content>
   <div

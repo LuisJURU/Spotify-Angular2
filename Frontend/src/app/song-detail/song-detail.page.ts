@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { AddPlaylistPage } from '../add-playlist/add-playlist.page';
 import { MusicService } from '../services/music.service';
@@ -29,6 +29,7 @@ export class SongDetailPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private musicService: MusicService,
     private modalController: ModalController
   ) {}
@@ -103,5 +104,9 @@ export class SongDetailPage implements OnInit {
   pausePreview() {
     const audio: HTMLAudioElement = this.audioPlayer.nativeElement;
     audio.pause();
+  }
+
+  goBack() {
+    this.router.navigate(['/search']);
   }
 }

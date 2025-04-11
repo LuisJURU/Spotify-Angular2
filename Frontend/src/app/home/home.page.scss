@@ -1,19 +1,39 @@
-/* Estilo general */
-ion-content {
-  --background: linear-gradient(to top, #000000, #1f1b45, #563494 ,#6a679e);
-  color: #fff; /* Texto blanco */
-  padding: 10px;
+/* filepath: c:\Users\luis3\OneDrive\Desktop\Spotify-Angular\Frontend\src\app\home\home.page.scss */
+.custom-header {
+  position: sticky; /* Permite que el header se mantenga visible al hacer scroll */
+  top: 10px;
+  left: 0;
+  width: 100%;
+  height: 70px; /* Aumenta ligeramente la altura para mayor claridad */
+  display: flex;
+  align-items: center;
+  padding: env(safe-area-inset-top, 10px) 15px; /* Espaciado dinámico para el notch */
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-ion-button {
-  border-radius: 20px;
+.menu-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
 }
 
 .username-display {
   font-size: 16px;
   color: #fff;
-  margin-left: 10px;
   font-weight: bold;
+  margin-left: 10px;
+}
+
+ion-content {
+  margin-top: calc(70px + env(safe-area-inset-top, 10px)); /* Ajusta el contenido para que no se superponga con el header */
+  --background: linear-gradient(to top, #000000, #1f1b45, #563494, #6a679e);
+  color: #fff;
+  padding: 10px;
 }
 
 /* Canciones Recientes */
