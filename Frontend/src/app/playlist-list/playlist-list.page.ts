@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MusicService } from '../services/music.service';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
@@ -18,7 +18,7 @@ export class PlaylistListPage implements OnInit {
   playlistName: string = '';
   songs: any[] = []; // Lista de canciones de la playlist
 
-  constructor(private route: ActivatedRoute, private musicService: MusicService) {}
+  constructor(private route: ActivatedRoute, private musicService: MusicService, private router: Router) {}
 
   ngOnInit() {
     // Obtener los parámetros de la URL
@@ -68,5 +68,9 @@ export class PlaylistListPage implements OnInit {
         console.error('Error al eliminar la canción:', error);
       },
     });
+  }
+  
+  goBack() {
+    this.router.navigate(['/home']);
   }
 }
