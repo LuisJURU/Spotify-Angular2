@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MusicService } from '../services/music.service';
 import { TrackService } from '../services/track.service';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, AlertController, ActionSheetController } from '@ionic/angular';
 import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
@@ -30,7 +30,9 @@ export class HomePage implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private trackService: TrackService, // Inyecta el servicio
-    private musicService: MusicService // Usa MusicService
+    private musicService: MusicService, // Usa MusicService
+    private alertController: AlertController,
+    private actionSheetController: ActionSheetController
   ) {}
 
   ngOnInit() {
@@ -109,7 +111,11 @@ export class HomePage implements OnInit, OnDestroy {
   loadPlaylists() {
     this.musicService.getPlaylists().subscribe({
       next: (response) => {
-        this.playlists = response; // Carga todas las playlists desde el backend
+        console.log('Playlists cargadas desde el backend:', response); // Depuración
+        this.playlists = response.map((playlist: any) => ({
+          ...playlist,
+          id: playlist._id, // Mapea `_id` a `id` si es necesario
+        }));
       },
       error: (error) => {
         console.error('Error al cargar las playlists:', error);
@@ -173,6 +179,77 @@ export class HomePage implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('Error al guardar la playlist:', error);
+      },
+    });
+  }
+  async openOptions(playlist: any) {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Opciones',
+      buttons: [
+        {
+          text: 'Editar',
+          handler: () => {
+            this.editPlaylist(playlist);
+          },
+        },
+        {
+          text: 'Eliminar',
+          role: 'destructive',
+          handler: () => {
+            this.confirmDeletePlaylist(playlist);
+          },
+        },
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+        },
+      ],
+    });
+  
+    await actionSheet.present();
+  }
+  
+  async confirmDeletePlaylist(playlist: any) {
+    console.log('Objeto playlist recibido:', playlist); // Depuración
+    if (!playlist || !playlist.id) {
+      console.error('El objeto playlist no tiene un ID válido:', playlist);
+      return;
+    }
+
+    const alert = await this.alertController.create({
+      header: 'Confirmar eliminación',
+      message: `¿Estás seguro de que deseas eliminar la playlist "${playlist.name}"?`,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+        },
+        {
+          text: 'Eliminar',
+          role: 'destructive',
+          handler: () => {  
+            this.musicService.deletePlaylist(playlist.id).subscribe({
+              next: (response) => {
+                console.log('Playlist eliminada:', response);
+                this.playlists = this.playlists.filter((p) => p.id !== playlist.id);
+              },
+              error: (error) => {
+                console.error('Error al eliminar la playlist:', error);
+              },
+            });
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
+  goToPlaylistDetail(playlist: any) {
+    this.router.navigate(['/playlist-list'], {
+      queryParams: {
+        playlistId: playlist.id, // ID de la playlist
+        playlistName: playlist.name, // Nombre de la playlist
       },
     });
   }

@@ -35,9 +35,13 @@ export class PlaylistListPage implements OnInit {
   loadPlaylist(playlistId: string) {
     this.musicService.getPlaylists(playlistId).subscribe({
       next: (playlist) => {
-        console.log('Respuesta del backend:', playlist); // Verifica la respuesta
+        console.log('Respuesta del backend:', playlist); // Depuración
         if (playlist && playlist.songs) {
-          this.songs = playlist.songs; // Asigna las canciones
+          // Mapea `_id` a `id` en las canciones si es necesario
+          this.songs = playlist.songs.map((song: any) => ({
+            ...song,
+            id: song._id, // Mapea `_id` a `id`
+          }));
           console.log('Canciones de la playlist cargadas:', this.songs);
         } else {
           console.warn('No se encontraron canciones en la playlist.');
@@ -51,7 +55,22 @@ export class PlaylistListPage implements OnInit {
   }
 
   removeSong(songId: string) {
-    this.songs = this.songs.filter((song) => song.id !== songId);
-    console.log('Canción eliminada. Lista actualizada:', this.songs);
+    if (!this.playlistId) {
+      console.error('No se encontró el ID de la playlist.');
+      return;
+    }
+
+    console.log('Eliminando canción con ID:', songId, 'de la playlist con ID:', this.playlistId);
+
+    this.musicService.deleteSongFromPlaylist(this.playlistId, songId).subscribe({
+      next: (response) => {
+        console.log('Canción eliminada del backend:', response);
+        // Actualiza la lista de canciones en el frontend
+        this.songs = this.songs.filter((song) => song.id !== songId);
+      },
+      error: (error) => {
+        console.error('Error al eliminar la canción:', error);
+      },
+    });
   }
 }

@@ -40,9 +40,8 @@ export class MusicService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, // Envía el token JWT
     });
-  
-    const payload = { name, songs };
-    return this.http.post(`${this.apiUrl}/playlists`, payload, { headers });
+
+    return this.http.post(`${this.apiUrl}/playlists`, { name, songs }, { headers });
   }
 
   getPlaylists(playlistId?: string): Observable<any> {
@@ -60,6 +59,31 @@ export class MusicService {
     });
   
     return this.http.put(`${this.apiUrl}/playlists/${id}`, data, { headers });
+  }
+
+  deletePlaylist(playlistId: string): Observable<any> {
+    console.log('Eliminando playlist con ID:', playlistId); // Depuración
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, // Envía el token JWT
+    });
+
+    return this.http.delete(`${this.apiUrl}/playlists/${playlistId}`, { headers });
+  }
+
+  deleteSongFromPlaylist(playlistId: string, songId: string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, // Envía el token JWT
+    });
+
+    return this.http.delete(`${this.apiUrl}/playlists/${playlistId}/songs/${songId}`, { headers });
+  }
+
+  addSongToPlaylist(playlistId: string, song: any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
+    });
+
+    return this.http.post(`${this.apiUrl}/playlists/${playlistId}/songs`, song, { headers });
   }
 
   notifyPlaylistCreated(playlist: any) {
