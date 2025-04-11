@@ -246,10 +246,13 @@ router.delete('/playlists/:playlistId/songs/:songId', authMiddleware, async (req
       return res.status(404).json({ error: 'Playlist no encontrada' });
     }
 
+    // Filtrar las canciones para eliminar la que coincide con el campo `id`
     playlist.songs = playlist.songs.filter((song) => song.id !== songId);
+
+    // Guardar los cambios en la base de datos
     await playlist.save();
 
-    res.json({ message: 'Canción eliminada correctamente' });
+    res.json({ message: 'Canción eliminada correctamente', playlist });
   } catch (error) {
     console.error('Error al eliminar la canción:', error);
     res.status(500).json({ error: 'Error al eliminar la canción' });

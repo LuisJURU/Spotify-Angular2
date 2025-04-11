@@ -4,7 +4,7 @@ const PlaylistSchema = new mongoose.Schema({
   name: { type: String, required: true },
   songs: [
     {
-      id: String,
+      id: { type: String, unique: true }, // Asegúrate de que este campo sea único
       name: String,
       artists: String,
       album: String,
@@ -12,7 +12,7 @@ const PlaylistSchema = new mongoose.Schema({
       imageUrl: String,
     },
   ],
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Relación con el usuario
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   createdAt: { type: Date, default: Date.now },
 });
 
