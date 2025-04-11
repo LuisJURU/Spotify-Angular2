@@ -9,6 +9,8 @@ export class MusicService {
   private apiUrl = 'https://spotify-angular2-yoli.vercel.app/api/music'; // URL del backend
   private playlistCreatedSubject = new BehaviorSubject<any>(null); // Emisor de eventos para playlists
   playlistCreated$ = this.playlistCreatedSubject.asObservable(); // Observable para escuchar eventos
+  private playlistUpdatedSubject = new BehaviorSubject<any>(null); // Emisor de eventos para actualizaciones de playlists
+  playlistUpdated$ = this.playlistUpdatedSubject.asObservable(); // Observable para escuchar eventos
 
   constructor(private http: HttpClient) {}
 
@@ -91,5 +93,9 @@ export class MusicService {
 
   notifyPlaylistCreated(playlist: any) {
     this.playlistCreatedSubject.next(playlist); // Notifica que se creó una nueva playlist
+  }
+
+  notifyPlaylistUpdated(updatedPlaylist: any) {
+    this.playlistUpdatedSubject.next(updatedPlaylist);
   }
 }
