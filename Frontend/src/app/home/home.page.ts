@@ -26,7 +26,6 @@ export class HomePage implements OnInit, OnDestroy {
   private navigationSubscription!: Subscription; // Suscripción al evento de navegación
   private touchStartX = 0; // Coordenada inicial del toque
   username: string = ''; // Propiedad para almacenar el nombre de usuario
-  selectedPlaylist: any = null;
 
   constructor(
     private router: Router,
@@ -50,13 +49,23 @@ export class HomePage implements OnInit, OnDestroy {
       if (updatedPlaylist) {
         const index = this.playlists.findIndex((p) => p.id === updatedPlaylist.id);
         if (index !== -1) {
-          // Actualiza la playlist existente
           this.playlists[index] = { ...this.playlists[index], ...updatedPlaylist };
         } else {
-          // Agrega la playlist si no existe
           this.playlists.push(updatedPlaylist);
         }
         console.log('Playlist actualizada:', updatedPlaylist);
+      }
+    });
+
+    // Suscríbete al evento de creación de playlists
+    this.musicService.playlistCreated$.subscribe((newPlaylist) => {
+      if (newPlaylist) {
+        // Verifica si la playlist ya existe antes de agregarla
+        const exists = this.playlists.some((playlist) => playlist.id === newPlaylist.id);
+        if (!exists) {
+          this.playlists.push(newPlaylist);
+          console.log('Nueva playlist añadida:', newPlaylist);
+        }
       }
     });
 
@@ -187,13 +196,19 @@ export class HomePage implements OnInit, OnDestroy {
     this.musicService.createPlaylist(playlistName, songs).subscribe({
       next: (response) => {
         console.log('Playlist guardada:', response);
-        this.playlists.push(response); // Agrega la nueva playlist a la lista local
+
+        // Verifica si la playlist ya existe antes de agregarla
+        const exists = this.playlists.some((playlist) => playlist.id === response.id);
+        if (!exists) {
+          this.playlists.push(response); // Agrega la nueva playlist solo si no existe
+        }
       },
       error: (error) => {
         console.error('Error al guardar la playlist:', error);
       },
     });
   }
+
   async openOptions(playlist: any) {
     const actionSheet = await this.actionSheetController.create({
       header: 'Opciones',
@@ -265,13 +280,5 @@ export class HomePage implements OnInit, OnDestroy {
         playlistName: playlist.name, // Nombre de la playlist
       },
     });
-  }
-
-  toggleDropdown(playlist: any) {
-    this.selectedPlaylist = this.selectedPlaylist === playlist ? null : playlist;
-  }
-
-  closeDropdown() {
-    this.selectedPlaylist = null;
   }
 }
