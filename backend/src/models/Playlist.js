@@ -4,9 +4,9 @@ const PlaylistSchema = new mongoose.Schema({
   name: { type: String, required: true },
   songs: [
     {
-      id: { type: String, unique: true }, // Asegúrate de que este campo sea único
+      id: { type: String, unique: true },
       name: String,
-      artists: String,
+      artists: [String], // Cambia a un arreglo de cadenas
       album: String,
       releaseDate: String,
       imageUrl: String,

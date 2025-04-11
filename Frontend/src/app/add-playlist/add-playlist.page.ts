@@ -56,12 +56,16 @@ export class AddPlaylistPage implements OnInit {
       return;
     }
 
-    const song = this.selectedSong; // Usa directamente la canción seleccionada
+    const song = {
+      id: this.selectedSong.id,
+      name: this.selectedSong.name,
+      artists: this.selectedSong.artists.join(', '), // Convierte el arreglo a una cadena
+      album: this.selectedSong.album.name, // Envía solo el nombre del álbum
+      releaseDate: this.selectedSong.album.release_date,
+      imageUrl: this.selectedSong.album.images[0]?.url,
+    };
 
-    if (!song) {
-      console.error('No se encontró la canción seleccionada.');
-      return;
-    }
+    console.log('Agregando canción a la playlist:', song); // Depuración
 
     this.musicService.addSongToPlaylist(playlistId, song).subscribe({
       next: (response) => {
@@ -69,7 +73,7 @@ export class AddPlaylistPage implements OnInit {
         this.updateLocalPlaylist(playlistId, song); // Actualiza la lista local
       },
       error: (error) => {
-        console.error('Error al agregar la canción a la playlist:', error);
+        console.error('Error al agregar la canción a la playlist:', error); // Depuración
       },
     });
   }

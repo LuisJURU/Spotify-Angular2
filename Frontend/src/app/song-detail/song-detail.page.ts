@@ -65,6 +65,7 @@ export class SongDetailPage implements OnInit {
       component: AddPlaylistPage,
       componentProps: {
         isModal: true, // Indica que se usa como modal
+        selectedSong: this.song, // Pasa la canción seleccionada al modal
       },
     });
 

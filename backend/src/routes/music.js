@@ -264,19 +264,24 @@ router.post('/playlists/:playlistId/songs', authMiddleware, async (req, res) => 
   const { playlistId } = req.params;
   const song = req.body;
 
+  console.log('ID de la playlist:', playlistId); // Depuración
+  console.log('Canción recibida:', song); // Depuración
+
   try {
     const playlist = await Playlist.findById(playlistId);
 
     if (!playlist) {
+      console.error('Playlist no encontrada con ID:', playlistId); // Depuración
       return res.status(404).json({ error: 'Playlist no encontrada' });
     }
 
     playlist.songs.push(song);
     await playlist.save();
 
+    console.log('Canción agregada a la playlist:', playlist); // Depuración
     res.json(playlist);
   } catch (error) {
-    console.error('Error al agregar la canción a la playlist:', error);
+    console.error('Error al agregar la canción a la playlist:', error); // Depuración
     res.status(500).json({ error: 'Error al agregar la canción a la playlist' });
   }
 });
