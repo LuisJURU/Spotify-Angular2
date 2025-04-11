@@ -43,6 +43,8 @@ ion-content {
   gap: 15px; /* Espaciado entre elementos */
 }
 
+
+
 .track-item {
   display: flex;
   height: 60px;
@@ -91,6 +93,8 @@ ion-content {
   color: white;
   cursor: pointer;
 }
+
+
 
 /* Sidebar */
 .sidebar {
@@ -283,94 +287,6 @@ ion-content {
     }
   }
 }
-
-.playlist-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.playlist-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  background: #181818;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.playlist-item:hover {
-  background: #333;
-}
-
-.playlist-info h2 {
-  font-size: 16px;
-  color: #fff;
-  margin: 0;
-}
-
-.playlist-info p {
-  font-size: 14px;
-  color: #aaa;
-  margin: 0;
-}
-
 .three-dots-btn {
   background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* filepath: c:\Users\luis3\OneDrive\Desktop\Spotify-Angular\Frontend\src\app\home\home.page.scss */
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.three-dots-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  top: 30px; /* Ajusta según sea necesario */
-  right: 0;
-  background: #181818;
-  border: 1px solid #333;
-  border-radius: 5px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  z-index: 1000;
-  padding: 10px;
-  min-width: 120px;
-}
-
-.dropdown-menu.show {
-  display: block;
-}
-
-.dropdown-menu button {
-  background: none;
-  border: none;
-  color: #fff;
-  padding: 10px;
-  text-align: left;
-  width: 100%;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.dropdown-menu button:hover {
-  background: #333;
 }
