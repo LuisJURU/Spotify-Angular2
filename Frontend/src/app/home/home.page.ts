@@ -50,7 +50,7 @@ export class HomePage implements OnInit, OnDestroy {
         const index = this.playlists.findIndex((p) => p.id === updatedPlaylist.id);
         if (index !== -1) {
           // Actualiza la playlist existente
-          this.playlists[index] = updatedPlaylist;
+          this.playlists[index] = { ...this.playlists[index], ...updatedPlaylist };
         } else {
           // Agrega la playlist si no existe
           this.playlists.push(updatedPlaylist);

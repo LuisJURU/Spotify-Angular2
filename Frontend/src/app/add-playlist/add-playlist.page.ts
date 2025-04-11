@@ -75,7 +75,10 @@ export class AddPlaylistPage implements OnInit {
         console.log(`Canción agregada a la playlist con ID: ${playlistId}`, response);
 
         // Notifica que la playlist ha sido actualizada
-        this.musicService.notifyPlaylistUpdated(response);
+        this.musicService.notifyPlaylistUpdated({
+          ...response,
+          id: response._id || response.id, // Asegúrate de usar el ID correcto
+        });
 
         // Muestra un mensaje de confirmación
         const alert = await this.alertController.create({
