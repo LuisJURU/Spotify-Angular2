@@ -67,7 +67,10 @@ export class MusicService {
       Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, // Envía el token JWT
     });
 
-    return this.http.delete(`${this.apiUrl}/playlists/${playlistId}`, { headers });
+    const url = `${this.apiUrl}/playlists/${playlistId}`;
+    console.log('URL generada para eliminar la playlist:', url); // Depuración
+
+    return this.http.delete(url, { headers });
   }
 
   deleteSongFromPlaylist(playlistId: string, songId: string): Observable<any> {

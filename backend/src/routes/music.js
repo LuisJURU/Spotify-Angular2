@@ -281,4 +281,23 @@ router.post('/playlists/:playlistId/songs', authMiddleware, async (req, res) => 
   }
 });
 
+router.delete('/playlists/:id', async (req, res) => {
+  const { id } = req.params;
+  console.log('ID recibido para eliminar la playlist:', id); // Depuración
+
+  try {
+    const playlist = await Playlist.findByIdAndDelete(id);
+
+    if (!playlist) {
+      console.error('Playlist no encontrada con ID:', id); // Depuración
+      return res.status(404).json({ error: 'Playlist no encontrada' });
+    }
+
+    res.json({ message: 'Playlist eliminada correctamente' });
+  } catch (error) {
+    console.error('Error al eliminar la playlist:', error);
+    res.status(500).json({ error: 'Error al eliminar la playlist' });
+  }
+});
+
 module.exports = router;
