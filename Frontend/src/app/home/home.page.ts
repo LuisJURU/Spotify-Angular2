@@ -44,11 +44,18 @@ export class HomePage implements OnInit, OnDestroy {
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     this.username = currentUser.username || 'Usuario';
 
-    // Suscríbete al evento de creación de playlists
-    this.musicService.playlistCreated$.subscribe((newPlaylist) => {
-      if (newPlaylist) {
-        this.playlists.push(newPlaylist); // Agrega la nueva playlist a la lista
-        console.log('Nueva playlist añadida:', newPlaylist);
+    // Suscríbete al evento de actualización de playlists
+    this.musicService.playlistUpdated$.subscribe((updatedPlaylist) => {
+      if (updatedPlaylist) {
+        const index = this.playlists.findIndex((p) => p.id === updatedPlaylist.id);
+        if (index !== -1) {
+          // Actualiza la playlist existente
+          this.playlists[index] = updatedPlaylist;
+        } else {
+          // Agrega la playlist si no existe
+          this.playlists.push(updatedPlaylist);
+        }
+        console.log('Playlist actualizada:', updatedPlaylist);
       }
     });
 
@@ -116,6 +123,10 @@ export class HomePage implements OnInit, OnDestroy {
           ...playlist,
           id: playlist._id, // Mapea `_id` a `id` si es necesario
         }));
+        this.playlists = this.playlists.filter(
+          (playlist, index, self) =>
+            index === self.findIndex((p) => p.id === playlist.id)
+        );
       },
       error: (error) => {
         console.error('Error al cargar las playlists:', error);

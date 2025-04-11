@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ModalController } from '@ionic/angular';
+import { IonicModule, ModalController, AlertController } from '@ionic/angular';
+import { Router } from '@angular/router';
 import { MusicService } from '../services/music.service';
 
 @Component({
@@ -20,7 +21,9 @@ export class AddPlaylistPage implements OnInit {
 
   constructor(
     private musicService: MusicService,
-    private modalController: ModalController // Inyecta ModalController
+    private modalController: ModalController, // Inyecta ModalController
+    private alertController: AlertController, // Inyecta AlertController
+    private router: Router // Inyecta Router
   ) {}
 
   ngOnInit() {
@@ -68,9 +71,28 @@ export class AddPlaylistPage implements OnInit {
     console.log('Agregando canción a la playlist:', song); // Depuración
 
     this.musicService.addSongToPlaylist(playlistId, song).subscribe({
-      next: (response) => {
+      next: async (response) => {
         console.log(`Canción agregada a la playlist con ID: ${playlistId}`, response);
-        this.updateLocalPlaylist(playlistId, song); // Actualiza la lista local
+
+        // Notifica que la playlist ha sido actualizada
+        this.musicService.notifyPlaylistUpdated(response);
+
+        // Muestra un mensaje de confirmación
+        const alert = await this.alertController.create({
+          header: 'Éxito',
+          message: 'La canción se agregó correctamente a la playlist.',
+          buttons: [
+            {
+              text: 'Aceptar',
+              handler: () => {
+                this.modalController.dismiss(); // Cierra el modal
+                this.router.navigate(['/home']); // Redirige a la página de inicio
+              },
+            },
+          ],
+        });
+
+        await alert.present();
       },
       error: (error) => {
         console.error('Error al agregar la canción a la playlist:', error); // Depuración
