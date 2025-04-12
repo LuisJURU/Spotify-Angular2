@@ -1,28 +1,30 @@
-<div class="header">
-  <div class="toolbar">
-    <button class="back-button" (click)="goBack()">←</button>
-    <h1 class="title">Agregar a Playlist</h1>
-  </div>
+<div class="custom-header">
+  <button id="menuButton" (click)="goBack()" class="menu-button">
+    ←
+  </button>
+  <span class="username-display">Agregar a Playlist</span>
 </div>
 
-<div class="content">
-  <div class="new-playlist">
-    <input
-      type="text"
-      placeholder="Nueva Playlist"
-      [(ngModel)]="newPlaylistName"
-      class="new-playlist-input"
-    />
-    <button class="create-playlist-button" (click)="createPlaylist()">Crear</button>
-  </div>
+<ion-content id="mainContent">
+  <div class="content">
+    <div class="new-playlist">
+      <input
+        type="text"
+        placeholder="Nueva Playlist"
+        [(ngModel)]="newPlaylistName"
+        class="new-playlist-input"
+      />
+      <button class="create-playlist-button" (click)="createPlaylist()">Crear</button>
+    </div>
 
-  <ul class="playlist-list">
-    <li
-      *ngFor="let playlist of playlists"
-      class="playlist-item"
-      (click)="addToPlaylist(playlist.id)"
-    >
-      <span class="playlist-name">{{ playlist.name }}</span>
-    </li>
-  </ul>
-</div>
+    <ul class="playlist-list">
+      <li
+        *ngFor="let playlist of playlists"
+        class="playlist-item"
+        (click)="addToPlaylist(playlist.id)"
+      >
+        <span class="playlist-name">{{ playlist.name }}</span>
+      </li>
+    </ul>
+  </div>
+</ion-content>

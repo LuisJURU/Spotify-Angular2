@@ -14,12 +14,20 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.custom-header h1 {
-  font-size: 18px;
+.menu-button {
+  background: none;
+  border: none;
   color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.username-display {
+  padding: 5px;
+  font-size: 18px;
   font-weight: bold;
-  margin: 0;
-  text-align: center;
+  color: #fff;
 }
 
 .header {
@@ -51,6 +59,13 @@
   margin: 0;
 }
 
+ion-content {
+  margin-top: calc(70px + env(safe-area-inset-top, 10px)); /* Ajusta el contenido para que no se superponga con el header */
+  --background: linear-gradient(to top, #000000, #1f1b45, #563494, #6a679e);
+  color: #fff;
+  padding: 10px;
+}
+
 .content {
   padding: 20px;
   display: flex;
@@ -61,33 +76,36 @@
 .new-playlist {
   display: flex;
   align-items: center;
-  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .new-playlist-input {
   flex: 1;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: none;
   border-radius: 5px;
-  background-color: #f9f9f9;
-  color: #333;
+  margin-right: 10px;
+  background-color: #202020;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .new-playlist-input::placeholder {
-  color: #aaa;
+  color: #ffffff;
 }
 
 .create-playlist-button {
-  background-color: #0067ce;
-  color: white;
+  padding: 10px 15px;
+  background: #0054e9;
+  color: var(--ion-color-primary-contrast, #fff);
   border: none;
   border-radius: 5px;
-  padding: 10px 20px;
-  font-size: 14px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.create-playlist-button:hover {
+  background-color: #004dd1;
+}
 
 .playlist-list {
   list-style: none;
@@ -96,19 +114,21 @@
 }
 
 .playlist-item {
-  padding: 10px 15px;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
+  padding: 10px;
+  border: none;
   border-radius: 5px;
   margin-bottom: 10px;
   cursor: pointer;
+  background-color: #202020;
   transition: background-color 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .playlist-item:hover {
-  background-color: #e9e9e9;
+  background-color: #000000;
 }
 
 .playlist-name {
-  color: #333;
+  font-size: 16px;
+  color: #ffffff;
 }

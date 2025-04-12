@@ -78,6 +78,7 @@
           <p>{{ playlist.songs.length }} canciones</p>
         </ion-label>
         <div class="options-container">
+          <!-- Botón de opciones -->
           <button
             class="three-dots-btn"
             (click)="toggleOptions(playlist); $event.stopPropagation()"
@@ -86,6 +87,8 @@
               <path d="M12,16a2,2,0,1,1-2,2A2,2,0,0,1,12,16ZM10,6a2,2,0,1,0,2-2A2,2,0,0,0,10,6Zm0,6a2,2,0,1,0,2-2A2,2,0,0,0,10,12Z" />
             </svg>
           </button>
+
+          <!-- Menú flotante -->
           <div
             class="floating-menu"
             *ngIf="playlist.showOptions"
