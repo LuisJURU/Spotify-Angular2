@@ -1,7 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
-import { AddPlaylistPage } from '../add-playlist/add-playlist.page';
 import { MusicService } from '../services/music.service';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
@@ -30,8 +28,7 @@ export class SongDetailPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private musicService: MusicService,
-    private modalController: ModalController
+    private musicService: MusicService
   ) {}
 
   ngOnInit() {
@@ -61,21 +58,10 @@ export class SongDetailPage implements OnInit {
     });
   }
 
-  async openAddToPlaylistModal() {
-    const modal = await this.modalController.create({
-      component: AddPlaylistPage,
-      componentProps: {
-        isModal: true, // Indica que se usa como modal
-        selectedSong: this.song, // Pasa la canción seleccionada al modal
-      },
+  openAddToPlaylistPage() {
+    this.router.navigate(['/add-playlist'], {
+      queryParams: { selectedSong: JSON.stringify(this.song) },
     });
-
-    await modal.present();
-
-    const { data } = await modal.onWillDismiss();
-    if (data?.playlistId) {
-      console.log('Canción agregada a la playlist con ID:', data.playlistId);
-    }
   }
 
   onImageLoad() {

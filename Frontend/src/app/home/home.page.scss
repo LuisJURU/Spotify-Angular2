@@ -43,8 +43,6 @@ ion-content {
   gap: 15px; /* Espaciado entre elementos */
 }
 
-
-
 .track-item {
   display: flex;
   height: 60px;
@@ -93,8 +91,6 @@ ion-content {
   color: white;
   cursor: pointer;
 }
-
-
 
 /* Sidebar */
 .sidebar {
@@ -287,6 +283,62 @@ ion-content {
     }
   }
 }
+.options-container {
+  position: relative; /* Asegura que el menú flotante se posicione relativo al contenedor */
+}
+
 .three-dots-btn {
   background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.floating-menu {
+  position: fixed;
+  background: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10000; 
+  padding: 10px 0;
+  width: 150px; 
+  overflow-y: auto; 
+  top: 40px; 
+  right: 10px; 
+  visibility: visible; 
+  opacity: 1; 
+}
+
+.floating-menu button {
+  display: block;
+  width: 100%;
+  padding: 10px 15px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px; /* Asegura que el tamaño de la fuente sea consistente */
+  color: #333;
+}
+
+.floating-menu button:hover {
+  background: #f0f0f0;
+}
+
+@media (max-width: 768px) {
+  .floating-menu {
+    top: auto; 
+    bottom: 10px;
+    left: 10px; 
+    right: 10px;
+    width: auto; 
+    max-width: 90%; 
+    max-height: 50%; 
+    overflow-y: auto;
+
+  }
+
+  .floating-menu button {
+    font-size: 16px; 
+  }
 }

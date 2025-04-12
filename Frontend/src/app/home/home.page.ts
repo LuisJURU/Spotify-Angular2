@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MusicService } from '../services/music.service';
 import { TrackService } from '../services/track.service';
-import { IonicModule, AlertController, ActionSheetController } from '@ionic/angular';
+import { IonicModule, AlertController } from '@ionic/angular';
 import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
@@ -31,8 +31,7 @@ export class HomePage implements OnInit, OnDestroy {
     private router: Router,
     private trackService: TrackService, // Inyecta el servicio
     private musicService: MusicService, // Usa MusicService
-    private alertController: AlertController,
-    private actionSheetController: ActionSheetController
+    private alertController: AlertController
   ) {}
 
   ngOnInit() {
@@ -209,33 +208,18 @@ export class HomePage implements OnInit, OnDestroy {
     });
   }
 
-  async openOptions(playlist: any) {
-    const actionSheet = await this.actionSheetController.create({
-      header: 'Opciones',
-      buttons: [
-        {
-          text: 'Editar',
-          handler: () => {
-            this.editPlaylist(playlist);
-          },
-        },
-        {
-          text: 'Eliminar',
-          role: 'destructive',
-          handler: () => {
-            this.confirmDeletePlaylist(playlist);
-          },
-        },
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-        },
-      ],
+  toggleOptions(playlist: any): void {
+    // Alterna la visibilidad del menú de opciones
+    playlist.showOptions = !playlist.showOptions;
+
+    // Cierra los menús de otras playlists
+    this.playlists.forEach((p) => {
+      if (p !== playlist) {
+        p.showOptions = false;
+      }
     });
-  
-    await actionSheet.present();
   }
-  
+
   async confirmDeletePlaylist(playlist: any) {
     console.log('Objeto playlist recibido:', playlist); // Depuración
     if (!playlist || !playlist.id) {
@@ -280,5 +264,15 @@ export class HomePage implements OnInit, OnDestroy {
         playlistName: playlist.name, // Nombre de la playlist
       },
     });
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    const target = event.target as HTMLElement;
+
+    // Si el clic no es en un botón de opciones o en el menú flotante, cierra todos los menús
+    if (!target.closest('.three-dots-btn') && !target.closest('.floating-menu')) {
+      this.playlists.forEach((playlist) => (playlist.showOptions = false));
+    }
   }
 }
