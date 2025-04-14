@@ -39,7 +39,7 @@ export class AddPlaylistPage implements OnInit {
     // Suscríbete a los eventos de actualización de playlists
     this.musicService.playlistUpdated$.subscribe((updatedPlaylist) => {
       if (updatedPlaylist) {
-        const index = this.playlists.findIndex((p) => p.id === updatedPlaylist.id);
+        const index = this.playlists.findIndex((p) => p.id === updatedPlaylist.id || p._id === updatedPlaylist._id);
         if (index !== -1) {
           // Si la playlist ya existe, actualiza sus datos
           this.playlists[index] = { ...this.playlists[index], ...updatedPlaylist };
@@ -94,10 +94,15 @@ export class AddPlaylistPage implements OnInit {
     this.musicService.addSongToPlaylist(this.selectedPlaylistToAdd.id, song).subscribe({
       next: (response) => {
         console.log(`Canción agregada a la playlist con ID: ${this.selectedPlaylistToAdd.id}`, response);
-        this.selectedPlaylistToAdd = null; // Limpia la selección
 
-        // Redirige al usuario al home
-        this.router.navigate(['/home']);
+        // Actualiza la playlist en el arreglo
+        const index = this.playlists.findIndex((p) => p.id === response.id || p._id === response._id);
+        if (index !== -1) {
+          this.playlists[index] = { ...this.playlists[index], ...response };
+        }
+
+        this.selectedPlaylistToAdd = null; // Limpia la selección
+        this.router.navigate(['/home']); // Redirige al usuario al home
       },
       error: (error) => {
         console.error('Error al agregar la canción a la playlist:', error);

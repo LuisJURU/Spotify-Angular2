@@ -236,8 +236,9 @@ router.put('/playlists/:id', authMiddleware, async (req, res) => {
 });
 
 // Ruta para eliminar una canción de una playlist
-router.delete('/playlists/:playlistId/songs/:songId', authMiddleware, async (req, res) => {
-  const { playlistId, songId } = req.params;
+router.post('/playlists/:playlistId/songs', authMiddleware, async (req, res) => {
+  const { playlistId } = req.params;
+  const song = req.body;
 
   try {
     const playlist = await Playlist.findById(playlistId);
@@ -246,16 +247,18 @@ router.delete('/playlists/:playlistId/songs/:songId', authMiddleware, async (req
       return res.status(404).json({ error: 'Playlist no encontrada' });
     }
 
-    // Filtrar las canciones para eliminar la que coincide con el campo `id`
-    playlist.songs = playlist.songs.filter((song) => song.id !== songId);
+    const completeSong = {
+      ...song,
+      imageUrl: song.imageUrl || 'assets/default-song.png',
+    };
 
-    // Guardar los cambios en la base de datos
-    await playlist.save();
+    playlist.songs.push(completeSong);
+    const updatedPlaylist = await playlist.save();
 
-    res.json({ message: 'Canción eliminada correctamente', playlist });
+    res.json(updatedPlaylist); // Devuelve la playlist actualizada
   } catch (error) {
-    console.error('Error al eliminar la canción:', error);
-    res.status(500).json({ error: 'Error al eliminar la canción' });
+    console.error('Error al agregar la canción a la playlist:', error);
+    res.status(500).json({ error: 'Error al agregar la canción a la playlist' });
   }
 });
 
