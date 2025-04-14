@@ -41,7 +41,11 @@ export class AddPlaylistPage implements OnInit {
       if (updatedPlaylist) {
         const index = this.playlists.findIndex((p) => p.id === updatedPlaylist.id);
         if (index !== -1) {
+          // Si la playlist ya existe, actualiza sus datos
           this.playlists[index] = { ...this.playlists[index], ...updatedPlaylist };
+        } else {
+          // Si no existe, agrégala al arreglo
+          this.playlists.push(updatedPlaylist);
         }
         console.log('Playlist actualizada:', updatedPlaylist);
       }
