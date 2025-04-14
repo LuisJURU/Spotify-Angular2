@@ -255,7 +255,13 @@ router.post('/playlists/:playlistId/songs', authMiddleware, async (req, res) => 
     playlist.songs.push(completeSong);
     const updatedPlaylist = await playlist.save();
 
-    res.json(updatedPlaylist); // Devuelve la playlist actualizada
+    // Devuelve la playlist actualizada con un identificador único
+    res.json({
+      id: updatedPlaylist._id,
+      name: updatedPlaylist.name,
+      songs: updatedPlaylist.songs,
+      createdBy: updatedPlaylist.createdBy,
+    });
   } catch (error) {
     console.error('Error al agregar la canción a la playlist:', error);
     res.status(500).json({ error: 'Error al agregar la canción a la playlist' });

@@ -39,7 +39,9 @@ export class AddPlaylistPage implements OnInit {
     // Suscríbete a los eventos de actualización de playlists
     this.musicService.playlistUpdated$.subscribe((updatedPlaylist) => {
       if (updatedPlaylist) {
-        const index = this.playlists.findIndex((p) => p.id === updatedPlaylist.id || p._id === updatedPlaylist._id);
+        const index = this.playlists.findIndex(
+          (p) => p.id === updatedPlaylist.id || p._id === updatedPlaylist.id
+        );
         if (index !== -1) {
           // Si la playlist ya existe, actualiza sus datos
           this.playlists[index] = { ...this.playlists[index], ...updatedPlaylist };
@@ -96,7 +98,7 @@ export class AddPlaylistPage implements OnInit {
         console.log(`Canción agregada a la playlist con ID: ${this.selectedPlaylistToAdd.id}`, response);
 
         // Actualiza la playlist en el arreglo
-        const index = this.playlists.findIndex((p) => p.id === response.id || p._id === response._id);
+        const index = this.playlists.findIndex((p) => p.id === response.id || p._id === response.id);
         if (index !== -1) {
           this.playlists[index] = { ...this.playlists[index], ...response };
         }
