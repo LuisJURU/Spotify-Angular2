@@ -43,12 +43,12 @@
   <div class="viewed-tracks" *ngIf="viewedTracks.length > 0">
     <h2>Canciones Recientes</h2>
     <div class="track-grid">
-      <div class="track-item" *ngFor="let track of viewedTracks | slice:0:6" (click)="goToSongDetail(track.id)">
-        <img
-          class="track-image"
-          [src]="track.imageUrl"
-          [alt]="track.name"
-        />
+      <div
+        class="track-item"
+        *ngFor="let track of viewedTracks | slice:0:6"
+        (click)="goToSongDetail(track.id)"
+      >
+        <img class="track-image" [src]="track.imageUrl" [alt]="track.name" />
         <div class="track-info">
           <h3>{{ track.name }}</h3>
         </div>
@@ -60,35 +60,77 @@
   <div class="popular-albums">
     <h2>Álbumes y Sencillos Populares</h2>
     <div class="carousel">
-      <!-- Sección de Álbumes y Sencillos Populares -->
-      <div class="popular-albums" *ngIf="popularAlbums.length > 0">
-        <div class="carousel">
-          <div class="carousel-item" *ngFor="let album of popularAlbums">
-            <img [src]="album.imageUrl" [alt]="album.name" />
-            <span>{{ album.name }}</span>
-            <small>{{ album.artists }}</small>
-          </div>
-        </div>
+      <div class="carousel-item" *ngFor="let album of popularAlbums">
+        <img [src]="album.imageUrl" [alt]="album.name" />
+        <span>{{ album.name }}</span>
+        <small>{{ album.artists }}</small>
       </div>
     </div>
   </div>
+  <!-- Contenedor de confirmación de eliminación -->
+  <div class="delete-confirmation" *ngIf="selectedPlaylistToDelete">
+    <div class="confirmation-dialog">
+      <p>
+        ¿Estás seguro de que deseas eliminar la playlist "{{
+        selectedPlaylistToDelete.name }}"?
+      </p>
+      <div class="confirmation-buttons">
+        <button class="cancel-btn" (click)="cancelDelete()">Cancelar</button>
+        <button class="delete-btn" (click)="deletePlaylist()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Playlists -->
   <div *ngIf="playlists.length > 0">
     <h2>Mis Playlists</h2>
     <ion-list>
-      <ion-item *ngFor="let playlist of playlists" (click)="goToPlaylistDetail(playlist)">
+      <ion-item
+        *ngFor="let playlist of playlists"
+        (click)="goToPlaylistDetail(playlist)"
+      >
         <ion-label>
           <h2>{{ playlist.name }}</h2>
           <p>{{ playlist.songs.length }} canciones</p>
         </ion-label>
-        <button slot="end" class="three-dots-btn" (click)="openOptions(playlist); $event.stopPropagation()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgb(255, 255, 255);">
-            <path d="M12,16a2,2,0,1,1-2,2A2,2,0,0,1,12,16ZM10,6a2,2,0,1,0,2-2A2,2,0,0,0,10,6Zm0,6a2,2,0,1,0,2-2A2,2,0,0,0,10,12Z"/>
-          </svg>
-        </button>
+        <div class="options-container">
+          <!-- Botón de opciones -->
+          <button
+            class="three-dots-btn"
+            (click)="toggleOptions(playlist); $event.stopPropagation()"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              style="fill: rgb(255, 255, 255)"
+            >
+              <path
+                d="M12,16a2,2,0,1,1-2,2A2,2,0,0,1,12,16ZM10,6a2,2,0,1,0,2-2A2,2,0,0,0,10,6Zm0,6a2,2,0,1,0,2-2A2,2,0,0,0,10,12Z"
+              />
+            </svg>
+          </button>
+
+          <!-- Menú flotante -->
+          <div
+            class="floating-menu"
+            *ngIf="playlist.showOptions"
+            (click)="$event.stopPropagation()"
+          >
+            <button (click)="editPlaylist(playlist); $event.stopPropagation()">
+              Editar
+            </button>
+            <button
+              (click)="confirmDeletePlaylist(playlist); $event.stopPropagation()"
+            >
+              Eliminar
+            </button>
+          </div>
+        </div>
       </ion-item>
     </ion-list>
   </div>
-  
 </ion-content>
 
 <app-navbar></app-navbar>

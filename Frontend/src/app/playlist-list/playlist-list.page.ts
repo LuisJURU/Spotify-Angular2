@@ -37,7 +37,10 @@ export class PlaylistListPage implements OnInit {
       next: (playlist) => {
         console.log('Respuesta del backend:', playlist); // Depuración
         if (playlist && playlist.songs) {
-          this.songs = playlist.songs; // No es necesario mapear `_id` a `id`
+          this.songs = playlist.songs.map((song: { imageUrl: any; }) => ({
+            ...song,
+            imageUrl: song.imageUrl || 'assets/default-song.png', // Agrega un valor por defecto
+          }));
           console.log('Canciones de la playlist cargadas:', this.songs);
         } else {
           console.warn('No se encontraron canciones en la playlist.');
@@ -72,5 +75,9 @@ export class PlaylistListPage implements OnInit {
   
   goBack() {
     this.router.navigate(['/home']);
+  }
+
+  goToSongDetail(songId: string): void {
+    this.router.navigate(['/song-detail', songId]);
   }
 }

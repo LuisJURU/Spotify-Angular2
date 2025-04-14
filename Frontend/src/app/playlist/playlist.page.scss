@@ -1,11 +1,129 @@
 ion-content {
-    margin-top: calc(70px + env(safe-area-inset-top, 10px)); /* Ajusta el contenido para que no se superponga con el header */
-    --background: linear-gradient(to top, #000000, #1f1b45, #563494, #6a679e);
+  margin-top: calc(70px + env(safe-area-inset-top, 10px)); /* Ajusta el contenido para que no se superponga con el header */
+  --background: linear-gradient(to top, #000000, #1f1b45, #563494, #6a679e);
+  color: #fff;
+  padding: 10px;
+}
+
+.content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 10px;
+    background-color: #202020;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #fff;
+    
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #333333a2;
+    color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.form-control::placeholder {
+    color: #ffffff;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn-add-song {
+    background-color: #0054e9;
     color: #fff;
     padding: 10px;
-  }
-  
-  .custom-header {
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin-bottom: 15px; /* Reduce el margen inferior */
+}
+
+.btn-add-song:hover {
+    background-color: #004dd1;
+}
+
+.btn-remove-song {
+    background-color: #ff4d4d;
+    color: #fff;
+    font-size: 12px; 
+    padding: 5px 10px; 
+    border-radius: 4px; 
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+    margin-left: 10px;
+    margin-bottom: 5px; /* Reduce el margen inferior */
+    width: auto;
+}
+
+.btn-remove-song:hover {
+    background-color: #ff6666;
+}
+
+.song-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.song-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #202020;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+    margin-bottom: 15px;
+}
+
+.song-item:hover {
+    background-color: #000000;
+}
+
+.song-name {
+    font-size: 16px;
+    color: #ffffff;
+}
+
+.btn-save-playlist {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-save-playlist:hover {
+    background-color: #0056b3;
+}
+
+.custom-header {
     position: sticky; /* Permite que el header se mantenga visible al hacer scroll */
     top: 10px;
     left: 0;
@@ -16,12 +134,12 @@ ion-content {
     padding: env(safe-area-inset-top, 10px) 15px; /* Espaciado dinámico para el notch */
     z-index: 1000;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-  
-  .custom-header h1 {
+}
+
+.custom-header h1 {
     font-size: 18px;
-    color: #fff;
     font-weight: bold;
     margin: 0;
     text-align: center;
-  }
+    padding: 10px;
+}
