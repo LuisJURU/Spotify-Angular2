@@ -26,6 +26,7 @@ export class HomePage implements OnInit, OnDestroy {
   private navigationSubscription!: Subscription; // Suscripción al evento de navegación
   private touchStartX = 0; // Coordenada inicial del toque
   username: string = ''; // Propiedad para almacenar el nombre de usuario
+  selectedPlaylistToDelete: any = null; // Nueva propiedad para manejar la playlist seleccionada
 
   constructor(
     private router: Router,
@@ -220,41 +221,37 @@ export class HomePage implements OnInit, OnDestroy {
     });
   }
 
-  async confirmDeletePlaylist(playlist: any) {
-    console.log('Objeto playlist recibido:', playlist); // Depuración
+  confirmDeletePlaylist(playlist: any) {
     if (!playlist || !playlist.id) {
       console.error('El objeto playlist no tiene un ID válido:', playlist);
       return;
     }
+    this.selectedPlaylistToDelete = playlist; // Asigna la playlist seleccionada
+  }
+
+  deletePlaylist() {
+    if (!this.selectedPlaylistToDelete || !this.selectedPlaylistToDelete.id) {
+      console.error('No hay una playlist válida para eliminar.');
+      return;
+    }
   
-    const alert = await this.alertController.create({
-      header: 'Confirmar eliminación',
-      message: `¿Estás seguro de que deseas eliminar la playlist "${playlist.name}"?`,
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-        },
-        {
-          text: 'Eliminar',
-          role: 'destructive',
-          handler: () => {
-            console.log('ID de la playlist a eliminar:', playlist.id); // Depuración
-            this.musicService.deletePlaylist(playlist.id).subscribe({
-              next: (response) => {
-                console.log('Playlist eliminada:', response);
-                this.playlists = this.playlists.filter((p) => p.id !== playlist.id);
-              },
-              error: (error) => {
-                console.error('Error al eliminar la playlist:', error);
-              },
-            });
-          },
-        },
-      ],
+    const playlist = this.selectedPlaylistToDelete;
+    console.log('ID de la playlist a eliminar:', playlist.id); // Depuración
+  
+    this.musicService.deletePlaylist(playlist.id).subscribe({
+      next: (response) => {
+        console.log('Playlist eliminada:', response);
+        this.playlists = this.playlists.filter((p) => p.id !== playlist.id);
+        this.selectedPlaylistToDelete = null; // Limpia la selección
+      },
+      error: (error) => {
+        console.error('Error al eliminar la playlist:', error);
+      },
     });
-  
-    await alert.present();
+  }
+
+  cancelDelete() {
+    this.selectedPlaylistToDelete = null; // Cancela la eliminación
   }
 
   goToPlaylistDetail(playlist: any) {

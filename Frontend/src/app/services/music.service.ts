@@ -93,7 +93,11 @@ export class MusicService {
       Authorization: `Bearer ${localStorage.getItem('jwtToken')}`,
     });
 
-    return this.http.post(`${this.apiUrl}/playlists/${playlistId}/songs`, song, { headers });
+    return this.http.post(`${this.apiUrl}/playlists/${playlistId}/songs`, song, { headers }).pipe(
+      tap((response) => {
+        this.notifyPlaylistUpdated(response); // Notifica que la playlist fue actualizada
+      })
+    );
   }
 
   notifyPlaylistCreated(playlist: any) {
@@ -101,6 +105,6 @@ export class MusicService {
   }
 
   notifyPlaylistUpdated(updatedPlaylist: any) {
-    this.playlistUpdatedSubject.next(updatedPlaylist);
+    this.playlistUpdatedSubject.next(updatedPlaylist); // Emite el evento de actualización
   }
 }

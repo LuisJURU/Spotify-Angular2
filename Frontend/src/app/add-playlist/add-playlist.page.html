@@ -1,8 +1,24 @@
 <div class="custom-header">
-  <button id="menuButton" (click)="goBack()" class="menu-button">
-    ←
-  </button>
+  <button id="menuButton" (click)="goBack()" class="menu-button">←</button>
   <span class="username-display">Agregar a Playlist</span>
+</div>
+
+<!-- Contenedor de confirmación de agregar canción -->
+<div class="add-confirmation" *ngIf="selectedPlaylistToAdd">
+  <div class="confirmation-dialog">
+    <p>
+      ¿Estás seguro de que deseas agregar la canción a la playlist "{{
+      selectedPlaylistToAdd.name }}"?
+    </p>
+    <div class="confirmation-buttons">
+      <button class="cancel-btn" (click)="cancelAddToPlaylist()">
+        Cancelar
+      </button>
+      <button class="confirm-btn" (click)="confirmAddToPlaylist()">
+        Agregar
+      </button>
+    </div>
+  </div>
 </div>
 
 <ion-content id="mainContent">
@@ -14,7 +30,9 @@
         [(ngModel)]="newPlaylistName"
         class="new-playlist-input"
       />
-      <button class="create-playlist-button" (click)="createPlaylist()">Crear</button>
+      <button class="create-playlist-button" (click)="createPlaylist()">
+        Crear
+      </button>
     </div>
 
     <ul class="playlist-list">

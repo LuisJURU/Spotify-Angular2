@@ -16,6 +16,7 @@ export class AddPlaylistPage implements OnInit {
   playlists: any[] = [];
   newPlaylistName: string = '';
   selectedSong: any;
+  selectedPlaylistToAdd: any = null; // Playlist seleccionada para agregar la canción
 
   constructor(
     private musicService: MusicService,
@@ -34,6 +35,17 @@ export class AddPlaylistPage implements OnInit {
     }
 
     this.loadPlaylists();
+
+    // Suscríbete a los eventos de actualización de playlists
+    this.musicService.playlistUpdated$.subscribe((updatedPlaylist) => {
+      if (updatedPlaylist) {
+        const index = this.playlists.findIndex((p) => p.id === updatedPlaylist.id);
+        if (index !== -1) {
+          this.playlists[index] = { ...this.playlists[index], ...updatedPlaylist };
+        }
+        console.log('Playlist actualizada:', updatedPlaylist);
+      }
+    });
   }
 
   loadPlaylists() {
@@ -52,8 +64,17 @@ export class AddPlaylistPage implements OnInit {
   }
 
   addToPlaylist(playlistId: string) {
-    if (!playlistId) {
-      console.error('El ID de la playlist es inválido:', playlistId);
+    const playlist = this.playlists.find((p) => p.id === playlistId);
+    if (!playlist) {
+      console.error('No se encontró la playlist con el ID:', playlistId);
+      return;
+    }
+    this.selectedPlaylistToAdd = playlist; // Asigna la playlist seleccionada
+  }
+
+  confirmAddToPlaylist() {
+    if (!this.selectedPlaylistToAdd || !this.selectedPlaylistToAdd.id) {
+      console.error('No hay una playlist válida seleccionada.');
       return;
     }
 
@@ -66,22 +87,22 @@ export class AddPlaylistPage implements OnInit {
       imageUrl: this.selectedSong.album.images[0]?.url,
     };
 
-    this.musicService.addSongToPlaylist(playlistId, song).subscribe({
-      next: async (response) => {
-        console.log(`Canción agregada a la playlist con ID: ${playlistId}`, response);
+    this.musicService.addSongToPlaylist(this.selectedPlaylistToAdd.id, song).subscribe({
+      next: (response) => {
+        console.log(`Canción agregada a la playlist con ID: ${this.selectedPlaylistToAdd.id}`, response);
+        this.selectedPlaylistToAdd = null; // Limpia la selección
 
-        const alert = await this.alertController.create({
-          header: 'Éxito',
-          message: 'La canción se agregó correctamente a la playlist.',
-          buttons: ['Aceptar'],
-        });
-
-        await alert.present();
+        // Redirige al usuario al home
+        this.router.navigate(['/home']);
       },
       error: (error) => {
         console.error('Error al agregar la canción a la playlist:', error);
       },
     });
+  }
+
+  cancelAddToPlaylist() {
+    this.selectedPlaylistToAdd = null; // Cancela la acción
   }
 
   createPlaylist() {
