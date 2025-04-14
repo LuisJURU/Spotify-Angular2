@@ -275,7 +275,13 @@ router.post('/playlists/:playlistId/songs', authMiddleware, async (req, res) => 
       return res.status(404).json({ error: 'Playlist no encontrada' });
     }
 
-    playlist.songs.push(song);
+    // Verifica si la canción tiene una propiedad `imageUrl`
+    const completeSong = {
+      ...song,
+      imageUrl: song.imageUrl || 'assets/default-song.png', // Agrega un valor por defecto si no existe
+    };
+
+    playlist.songs.push(completeSong);
     await playlist.save();
 
     console.log('Canción agregada a la playlist:', playlist); // Depuración
