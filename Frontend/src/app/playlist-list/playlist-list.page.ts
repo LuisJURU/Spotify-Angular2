@@ -73,4 +73,8 @@ export class PlaylistListPage implements OnInit {
   goBack() {
     this.router.navigate(['/home']);
   }
+
+  goToSongDetail(songId: string): void {
+    this.router.navigate(['/song-detail', songId]);
+  }
 }
