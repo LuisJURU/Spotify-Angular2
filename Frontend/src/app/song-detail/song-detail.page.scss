@@ -15,7 +15,7 @@ ion-content {
   align-items: center;
   padding: env(safe-area-inset-top, 10px) 15px; /* Espaciado dinámico para el notch */
   z-index: 1000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  // box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .back-button {
