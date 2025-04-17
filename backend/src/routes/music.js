@@ -173,10 +173,10 @@ router.post('/playlists', authMiddleware, async (req, res) => {
     });
 
     const savedPlaylist = await newPlaylist.save();
-    console.log('Nueva playlist creada:', savedPlaylist);
+    console.log('Nueva playlist creada:', savedPlaylist); // Depuración
     res.status(201).json(savedPlaylist);
   } catch (error) {
-    console.error('Error al crear la playlist:', error);
+    console.error('Error al crear la playlist:', error); // Depuración
     res.status(500).json({ error: 'Error al crear la playlist' });
   }
 });

@@ -40,8 +40,9 @@ export class PlaylistPage implements OnInit {
       // Si se pasa una canción desde la búsqueda, agregarla a la playlist
       const trackId = params['trackId'];
       const trackName = params['trackName'];
+      const trackImageUrl = params['trackImageUrl']; // Captura la URL de la imagen
       if (trackId && trackName) {
-        this.addSong({ id: trackId, name: trackName });
+        this.addSong({ id: trackId, name: trackName, imageUrl: trackImageUrl });
       }
     });
   
@@ -110,11 +111,15 @@ export class PlaylistPage implements OnInit {
     }
   }
 
-  addSong(song: { id: string; name: string }) {
+  addSong(song: { id: string; name: string; imageUrl?: string }) {
     // Verifica si la canción ya está en la lista antes de agregarla
     if (!this.selectedSongs.some((s) => s.id === song.id)) {
-      this.selectedSongs.push(song);
-      console.log('Canción agregada:', song);
+      const completeSong = {
+        ...song,
+        imageUrl: song.imageUrl || 'assets/default-song.png', // Imagen predeterminada si no se proporciona
+      };
+      this.selectedSongs.push(completeSong);
+      console.log('Canción agregada:', completeSong);
     } else {
       console.log('La canción ya está en la playlist.');
     }
