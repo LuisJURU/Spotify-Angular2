@@ -82,17 +82,14 @@
   </div>
 
   <!-- Playlists -->
-  <div *ngIf="playlists.length > 0">
+  <div class="playlists-container">
     <h2>Mis Playlists</h2>
-    <ion-list>
-      <ion-item
-        *ngFor="let playlist of playlists"
-        (click)="goToPlaylistDetail(playlist)"
-      >
-        <ion-label>
-          <h2>{{ playlist.name }}</h2>
+    <div class="playlist-grid">
+      <div class="playlist-item" *ngFor="let playlist of playlists">
+        <div class="playlist-info" (click)="goToPlaylistDetail(playlist)">
+          <h3>{{ playlist.name }}</h3>
           <p>{{ playlist.songs.length }} canciones</p>
-        </ion-label>
+        </div>
         <div class="options-container">
           <!-- Botón de opciones -->
           <button
@@ -111,7 +108,7 @@
               />
             </svg>
           </button>
-
+  
           <!-- Menú flotante -->
           <div
             class="floating-menu"
@@ -128,8 +125,8 @@
             </button>
           </div>
         </div>
-      </ion-item>
-    </ion-list>
+      </div>
+    </div>
   </div>
 </ion-content>
 
