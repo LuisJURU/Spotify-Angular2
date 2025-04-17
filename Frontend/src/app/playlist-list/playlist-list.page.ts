@@ -30,6 +30,17 @@ export class PlaylistListPage implements OnInit {
         this.loadPlaylist(this.playlistId);
       }
     });
+
+    // Suscribirse a los cambios en las playlists
+    this.musicService.playlistUpdated$.subscribe((updatedPlaylist) => {
+      if (updatedPlaylist && updatedPlaylist.id === this.playlistId) {
+        console.log('Playlist actualizada:', updatedPlaylist);
+        this.songs = updatedPlaylist.songs.map((song: any) => ({
+          ...song,
+          imageUrl: song.imageUrl || 'assets/default-song.png', // Agrega un valor por defecto
+        }));
+      }
+    });
   }
 
   loadPlaylist(playlistId: string) {
