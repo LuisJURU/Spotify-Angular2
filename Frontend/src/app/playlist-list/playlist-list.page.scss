@@ -43,6 +43,7 @@ ion-content {
   display: flex;
   align-items: center;
   gap: 15px; /* Espaciado entre la imagen y los detalles */
+    flex: 1; /* Ocupa el espacio disponible */
 }
 
 .song-image {
@@ -78,6 +79,9 @@ ion-content {
 }
 
 ion-item {
+  display: flex; /* Asegura que los elementos internos estén alineados horizontalmente */
+  align-items: center; /* Centra verticalmente los elementos */
+  justify-content: space-between; /* Coloca los elementos en los extremos */
   --background: transparent;
   border-bottom: 1px solid #333; /* Borde inferior para dividir las canciones */
   padding: 10px 0;
@@ -97,4 +101,19 @@ ion-button {
 
 ion-button:hover {
   --background: #ff6666;
+}
+
+.delete-button {
+  background-color: #e74c3c; /* Color rojo */
+  color: #fff; /* Texto blanco */
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: auto; /* Empuja el botón hacia el final */
+}
+
+.delete-button:hover {
+  background-color: #c0392b; /* Color rojo más oscuro al pasar el cursor */
 }
