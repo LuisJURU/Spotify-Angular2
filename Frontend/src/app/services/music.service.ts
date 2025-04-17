@@ -84,7 +84,7 @@ export class MusicService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, // Envía el token JWT
     });
-
+  
     return this.http.delete(`${this.apiUrl}/playlists/${playlistId}/songs/${songId}`, { headers });
   }
 
