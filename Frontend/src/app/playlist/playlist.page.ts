@@ -40,8 +40,9 @@ export class PlaylistPage implements OnInit {
       // Si se pasa una canción desde la búsqueda, agregarla a la playlist
       const trackId = params['trackId'];
       const trackName = params['trackName'];
+      const trackImageUrl = params['trackImageUrl']; // Captura la URL de la imagen
       if (trackId && trackName) {
-        this.addSong({ id: trackId, name: trackName });
+        this.addSong({ id: trackId, name: trackName, imageUrl: trackImageUrl });
       }
     });
   

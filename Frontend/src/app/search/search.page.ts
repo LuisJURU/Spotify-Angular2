@@ -104,6 +104,7 @@ export class SearchPage {
       queryParams: {
         trackId: track.id,
         trackName: track.name,
+        trackImageUrl: track.imageUrl, // Incluye la URL de la imagen
       },
     });
   }

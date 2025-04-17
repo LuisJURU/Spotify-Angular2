@@ -44,7 +44,10 @@ export class MusicService {
       Authorization: `Bearer ${localStorage.getItem('jwtToken')}`, // Envía el token JWT
     });
 
-    return this.http.post(`${this.apiUrl}/playlists`, { name, songs }, { headers }).pipe(
+    const payload = { name, songs };
+    console.log('Payload enviado al backend:', payload); // Depuración
+
+    return this.http.post(`${this.apiUrl}/playlists`, payload, { headers }).pipe(
       tap((response) => {
         this.playlistCreatedSubject.next(response); // Notifica la creación
       })
