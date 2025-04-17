@@ -320,4 +320,25 @@ router.delete('/playlists/:id', async (req, res) => {
   }
 });
 
+router.delete('/playlists/:playlistId/songs/:songId', authMiddleware, async (req, res) => {
+  const { playlistId, songId } = req.params;
+
+  try {
+    const playlist = await Playlist.findById(playlistId);
+
+    if (!playlist) {
+      return res.status(404).json({ error: 'Playlist no encontrada' });
+    }
+
+    // Filtra las canciones para eliminar la que coincide con el ID
+    playlist.songs = playlist.songs.filter((song) => song.id !== songId);
+    const updatedPlaylist = await playlist.save();
+
+    res.json(updatedPlaylist);
+  } catch (error) {
+    console.error('Error al eliminar la canción de la playlist:', error);
+    res.status(500).json({ error: 'Error al eliminar la canción de la playlist' });
+  }
+});
+
 module.exports = router;
