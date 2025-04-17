@@ -173,7 +173,7 @@ ion-content {
 
 .playlist-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Ajusta el número de columnas automáticamente */
+  // grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Ajusta el número de columnas automáticamente */
 }
 
 .playlist-item {
@@ -231,7 +231,7 @@ ion-content {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   z-index: 10000;
   padding: 10px 0;
-  width: 190px;
+  width: 150px;
   bottom: calc(100% + 10px); /* Posiciona el menú hacia arriba del botón */
   right: 0; /* Alinea el menú con el borde derecho */
   visibility: visible;
