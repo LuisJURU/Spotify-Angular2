@@ -159,13 +159,21 @@ const Playlist = require('../models/Playlist'); // Importa el modelo de Playlist
 
 router.post('/playlists', authMiddleware, async (req, res) => {
   const { name, songs } = req.body;
-  const userId = req.user.id; // ID del usuario autenticado
+  const userId = req.user.id;
 
   if (!name) {
     return res.status(400).json({ error: 'El nombre de la playlist es obligatorio' });
   }
 
   try {
+    // Verifica si hay canciones duplicadas en el array `songs`
+    const songIds = songs.map((song) => song.id);
+    const hasDuplicates = songIds.some((id, index) => songIds.indexOf(id) !== index);
+
+    if (hasDuplicates) {
+      return res.status(400).json({ error: 'La playlist contiene canciones duplicadas' });
+    }
+
     const newPlaylist = new Playlist({
       name,
       songs: songs || [],
@@ -173,10 +181,9 @@ router.post('/playlists', authMiddleware, async (req, res) => {
     });
 
     const savedPlaylist = await newPlaylist.save();
-    console.log('Nueva playlist creada:', savedPlaylist); // Depuración
     res.status(201).json(savedPlaylist);
   } catch (error) {
-    console.error('Error al crear la playlist:', error); // Depuración
+    console.error('Error al crear la playlist:', error);
     res.status(500).json({ error: 'Error al crear la playlist' });
   }
 });
