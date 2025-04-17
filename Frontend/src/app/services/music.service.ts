@@ -49,7 +49,7 @@ export class MusicService {
 
     return this.http.post(`${this.apiUrl}/playlists`, payload, { headers }).pipe(
       tap((response) => {
-        this.playlistCreatedSubject.next(response); // Notifica la creación
+        this.notifyPlaylistUpdated(response); // Notifica la creación
       })
     );
   }
